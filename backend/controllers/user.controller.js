@@ -6,14 +6,15 @@ export const register=async (req, res)=>{
         const {fullname, email, phoneNumber, password, role}= req.body;
         if(!fullname || !email || !phoneNumber || !password || !role ){
             return res.status(404).json({
-                msg:"Something is missing",
+                message:"Something is missing",
                 succes: false
             })
         }
         const user = await User.findOne({email});
         if(user){
             return res.status(400).json({
-                msg:"User is already exist with this email"
+                message:"User is already exist with this email",
+                succes:false
             })
         }
 
@@ -41,14 +42,14 @@ export const login = async (req, res)=>{
     try {
         if(!email || !password){
             return res.status(400).json({
-                msg:"Something is missing",
+                message:"Something is missing",
                 succes: false
             })
         }
        let user = await User.findOne({email});
         if(!user){
             res.status(404).json({
-                msg:"Incorrect email or password",
+                message:"Incorrect email or password",
                 succes: false
             })
         }
@@ -56,13 +57,13 @@ export const login = async (req, res)=>{
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if(!isPasswordMatch){
             res.status(404).json({
-                msg:"Incorrect email or password",
+                message:"Incorrect email or password",
                 succes: false
             })
         }
         if(role!=user.role){
             res.status(404).json({
-                msg:"Account does not exist with current role",
+                message:"Account does not exist with current role",
                 succes: false
             })
         }
@@ -85,9 +86,9 @@ export const login = async (req, res)=>{
             sameSite: 'strict',
             maxAge: 1*24*60*60*1000 
         }).json({
-            msg:`Welcome back ${user.fullname}`,
+            message:`Welcome back: ${user.fullname}`,
             user,
-            success: false
+            success: true
         })
         }
      catch (error) {
@@ -98,7 +99,7 @@ export const login = async (req, res)=>{
 export const logout = async(req, res)=>{
     try {
         return res.status(200).cookie("token", "", {maxAge:0}).json({
-            msg:"Logged out successfully",
+            message:"Logged out successfully",
             succes:true
         })
     } catch (error) {

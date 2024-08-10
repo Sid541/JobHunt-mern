@@ -15,15 +15,15 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
-const corsOptions={
-    origin: "http://localhost:5173",
-    Credentials: true
-}
+app.use(cors({
+    origin: 'http://localhost:5173',  // Allow requests from this origin
+    credentials: true  // Allow cookies and headers to be sent
+  }));
 
 const PORT=process.env.PORT || 3000
 
 
-app.use(cors(corsOptions))
+
 
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/company", companyRoute)
