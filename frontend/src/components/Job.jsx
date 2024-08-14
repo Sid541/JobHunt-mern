@@ -3,8 +3,11 @@ import React from 'react'
 import { Button } from './ui/button'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
+import { useNavigate } from 'react-router-dom'
 
 const Job = () => {
+  const navigate=useNavigate();
+  const jobId="fiijdnkssksbn"
   return (
     <div className='p-5 rounded-lg shadow-xl bg-white border border-gray-200 '>
       <div className='flex justify-between'>
@@ -12,13 +15,12 @@ const Job = () => {
       <Button variant="outline" className="rounded-full" size="icon"><Bookmark/></Button>
       </div>
       <div className='flex items-center gap-2 my-2'>
-      <Button>
        <Avatar>
         <AvatarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqQTxgK4s6dLvXDjdU2ptgqQE2ty3g2iapSwm6NxGF9ZXkgXg4qqkzGr8FfTiQD0g9afw&usqp=CAU">
 
         </AvatarImage>
        </Avatar>
-      </Button>
+      
       <div>
         <h1 className='font-medium text-lg'>Company Name</h1>
         <p className='text-sm text-gray-500'>India</p>
@@ -34,7 +36,7 @@ const Job = () => {
         <Badge className={"text-blue-900 font-bold"} variant="ghost">24LPA</Badge>
     </div>
     <div className='flex items-center gap-4 mt-4'>
-      <Button variant="outline" className="rounded-3xl">Details</Button>
+      <Button variant="outline" className="rounded-3xl" onClick={()=> navigate(`/description/${jobId}`)}>Details</Button>
       <Button className="bg-[#632dc0] rounded-3xl hover:bg-[#402176]">Save for Later</Button>
     </div>
     </div>

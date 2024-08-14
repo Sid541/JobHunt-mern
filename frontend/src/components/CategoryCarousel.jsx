@@ -22,8 +22,8 @@ const CategoryCarousel = () => {
         <CarouselContent>
             { category.map((cat, index) => {
                 
-               return <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-                <Button className="rounded-2xl bg-cyan-700 hover:bg-cyan-800">{cat}</Button>
+               return <CarouselItem className="md:basis-1/2 lg:basis-1/3" id={index}>
+                <Button  className="rounded-2xl bg-cyan-700 hover:bg-cyan-800">{cat}</Button>
                 </CarouselItem>
          })}
         </CarouselContent>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./shared/Navbar";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -6,6 +6,9 @@ import { Contact, Mail, Pen } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 import AppliedJobTable from "./AppliedJobTable";
+import UpdateProfileBox from "./UpdateProfileBox";
+import { useSelector } from "react-redux";
+import store from "@/redux/store";
 
 const skills = [
   "HTML",
@@ -17,8 +20,11 @@ const skills = [
   "Auth0",
   "MySQL",
 ];
+const isResume = true;
 const Profile = () => {
-  const isResume = true;
+  const [open, setOpen]=useState(false);
+  const {user}=useSelector(store=>store.auth);
+
   return (
     <div>
       <Navbar />
@@ -32,29 +38,29 @@ const Profile = () => {
               ></AvatarImage>
             </Avatar>
             <div>
-              <h1 className="font-medium text-xl ">Full Name</h1>
-              <p>Add your bio here...</p>
+              <h1 className="font-medium text-xl ">{user?.fullname}</h1>
+              <p>{user?.profile?.bio}</p>
             </div>
           </div>
-          <Button className="text-right rounded-2xl" variant="outline">
+          <Button className="text-right rounded-2xl" onClick={()=>setOpen(true)} variant="outline">
             <Pen />
           </Button>
         </div>
         <div className="flex flex-col gap-1 my-5">
           <div className="flex items-center gap-3 my-2">
             <Mail />
-            <span>sid123@gmail.com</span>
+            <span>{user?.email}</span>
           </div>
           <div className="flex items-center gap-3">
             <Contact />
-            <span>7894561230</span>
+            <span>{user?.phoneNumber}</span>
           </div>
         </div>
         <div>
           <h1>Skills</h1>
           <div className="flex items-center gap-1">
-            {skills.length !== 0 ? (
-              skills.map((item, index) => <Badge key={index}>{item}</Badge>)
+            {user?.profile?.skills.length !== 0 ? (
+              user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>)
             ) : (
               <span>N/A</span>
             )}
@@ -64,7 +70,7 @@ const Profile = () => {
           <Label className="text-md font-bold">Resume</Label>
           {isResume ? (
             <a
-              href="https://youtube.com/@patelmernstack"
+              href={user?.profile?.resume}
               target="blank"
               className="text-blue-600 hover:underline cursor-pointer"
             >
@@ -76,9 +82,10 @@ const Profile = () => {
         </div>
       </div>
       <div className="max-w-4xl mx-auto bg-white rounded-2xl">
-        <h1>Applied Jobs</h1>
+        <h1 className="font-bold text-lg my-5">Applied Jobs</h1>
         <AppliedJobTable />
       </div>
+      <UpdateProfileBox open={open} setOpen={setOpen}/>
     </div>
   );
 };
