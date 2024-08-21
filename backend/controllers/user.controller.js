@@ -10,7 +10,7 @@ export const register=async (req, res)=>{
         if(!fullname || !email || !phoneNumber || !password || !role ){
             return res.status(404).json({
                 message:"Something is missing",
-                succes: false
+                success: false
             })
         }
 
@@ -21,7 +21,7 @@ export const register=async (req, res)=>{
         if(user){
             return res.status(400).json({
                 message:"User is already exist with this email",
-                succes:false
+                success:false
             })
         }
 
@@ -50,20 +50,19 @@ export const register=async (req, res)=>{
 export const login = async (req, res)=>{
     const {email, password, role}=req.body;
     
-    console.log(email,password,role);
     
     try {
         if(!email || !password){
             return res.status(400).json({
                 message:"Something is missing",
-                succes: false
+                success: false
             })
         }
        let user = await User.findOne({email});
         if(!user){
             res.status(404).json({
                 message:"Incorrect email or password",
-                succes: false
+                success: false
             })
         }
 
@@ -71,13 +70,13 @@ export const login = async (req, res)=>{
         if(!isPasswordMatch){
             res.status(404).json({
                 message:"Incorrect email or password",
-                succes: false
+                success: false
             })
         }
         if(role!=user.role){
             res.status(404).json({
                 message:"Account does not exist with current role",
-                succes: false
+                success: false
             })
         }
 
@@ -113,7 +112,7 @@ export const logout = async(req, res)=>{
     try {
         return res.status(200).cookie("token", "", {maxAge:0}).json({
             message:"Logged out successfully",
-            succes:true
+            success:true
         })
     } catch (error) {
         console.log(error);

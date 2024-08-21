@@ -3,16 +3,17 @@ import { Company } from "../models/company.model.js";
 export const registerCompany = async (req, res) => {
   try {
     const { CompanyName } = req.body;
+    
     if (!CompanyName) {
       return res.status(401).json({
-        msg: "Company name is required",
+        message: "Company name is required",
         success: false,
       });
     }
     let company = await Company.findOne({ name: CompanyName });
     if (company) {
       return res.status(401).json({
-        msg: "You cannot register same company",
+        message: "You cannot register same company",
         success: false,
       });
     }
@@ -22,7 +23,7 @@ export const registerCompany = async (req, res) => {
     });
 
     return res.status(201).json({
-      msg: "Company registered successfully",
+      message: "Company registered successfully",
       company,
       success: true,
     });
@@ -37,7 +38,7 @@ export const getCompany = async (req, res) => {
     const companies = await Company.findOne({ userId });
     if (!companies) {
       return res.status(401).json({
-        msg: "Companies not found",
+        message: "Companies not found",
         success: false,
       });
     }
@@ -55,7 +56,7 @@ export const getCompanyById = async (req, res) => {
     const company = await Company.findById(companyId);
     if (!company) {
       return res.status(401).json({
-        msg: "Company not found",
+        message: "Company not found",
         success: false,
       });
     }

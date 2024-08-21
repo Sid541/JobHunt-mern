@@ -1,6 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSuitcase, faHouse, faWindowMaximize, faBriefcase } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSuitcase,
+  faHouse,
+  faWindowMaximize,
+  faBriefcase,
+} from "@fortawesome/free-solid-svg-icons";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -12,32 +17,28 @@ import axios from "axios";
 import { setUser } from "@/redux/authSlice";
 
 const Navbar = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user } = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/user/logout",
-         {
-          headers: {
-            "Content-Type": "application/json"
-        }, withCredentials: true });
-      console.log(res.data)
-      if (res.data.success) {
-        dispatch(setUser(null));  // Set user to null
-        navigate("/");            // Navigate to the home page
-        toast.success(res.data.message); // Show success toast
-      }
+        const res = await axios.get(`http://localhost:3000/api/v1/user/logout`, 
+          { withCredentials: true 
+
+          });
+          console.log(res.data);
+          
+        if (res.data.success) {
+            dispatch(setUser(null));
+            navigate("/");
+            toast.success(res.data.message);
+        }
     } catch (error) {
-      console.error("Error during logout:", error);
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.error(error.response.data.message); // Show error toast
-      } else {
-        toast.error("An unknown error occurred during logout.");
-      }
+        console.log(error);
+        toast.error(error.response.data.message);
     }
-  };
+}
 
   return (
     <div className="bg-white">
@@ -52,30 +53,53 @@ const Navbar = () => {
         </Link>
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-7 cursor-pointer ">
-            <li className="hover:text-[#5426a3]">
-              <Link to="/">
-                <span className="text-sm mx-1">
-                  <FontAwesomeIcon icon={faHouse} />
-                </span>
-                Home
-              </Link>
-            </li>
-            <li className="hover:text-[#5426a3]">
-              <Link to="/jobs">
-                <span className="text-sm mx-1">
-                  <FontAwesomeIcon icon={faBriefcase} />
-                </span>
-                Jobs
-              </Link>
-            </li>
-            <li className="hover:text-[#5426a3]">
-              <Link to="/browse">
-                <span className="text-sm mx-1">
-                  <FontAwesomeIcon icon={faWindowMaximize} />
-                </span>
-                Browse
-              </Link>
-            </li>
+            {user && user.role == "recruiter" ? (
+              <>
+                <li className="hover:text-[#5426a3]">
+                  <Link to="/admin/companies">
+                    <span className="text-sm mx-1">
+                      <FontAwesomeIcon icon={faHouse} />
+                    </span>
+                    Companies
+                  </Link>
+                </li>
+                <li className="hover:text-[#5426a3]">
+                  <Link to="/admin/jobs">
+                    <span className="text-sm mx-1">
+                      <FontAwesomeIcon icon={faBriefcase} />
+                    </span>
+                    Jobs
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="hover:text-[#5426a3]">
+                  <Link to="/">
+                    <span className="text-sm mx-1">
+                      <FontAwesomeIcon icon={faHouse} />
+                    </span>
+                    Home
+                  </Link>
+                </li>
+                <li className="hover:text-[#5426a3]">
+                  <Link to="/jobs">
+                    <span className="text-sm mx-1">
+                      <FontAwesomeIcon icon={faBriefcase} />
+                    </span>
+                    Jobs
+                  </Link>
+                </li>
+                <li className="hover:text-[#5426a3]">
+                  <Link to="/browse">
+                    <span className="text-sm mx-1">
+                      <FontAwesomeIcon icon={faWindowMaximize} />
+                    </span>
+                    Browse
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
           {user ? (
             <Popover>
@@ -96,20 +120,27 @@ const Navbar = () => {
                   <div>
                     <h4 className="font-medium">{user?.fullname}</h4>
                     <p className="text-sm text-muted-foreground">
-                     {user?.profile.bio}
+                      {user?.profile.bio}
                     </p>
                   </div>
                 </div>
                 <div className="my-2 flex flex-col text-gray-600">
-                  <div className="flex w-fit items-center cursor-pointer">
-                    <User2 />
-                    <Link to="/profile">
-                      <Button variant="link" className="mx-auto">View Profile</Button>
-                    </Link>
-                  </div>
+                  {user && user.role == "student" && (
+                    <div className="flex w-fit items-center cursor-pointer">
+                      <User2 />
+                      <Link to="/profile">
+                        <Button variant="link" className="mx-auto">
+                          View Profile
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+
                   <div className="flex w-fit items-center cursor-pointer">
                     <LogOut />
-                    <Button onClick={logoutHandler} variant="link">Logout</Button>
+                    <Button onClick={logoutHandler} variant="link">
+                      Logout
+                    </Button>
                   </div>
                 </div>
               </PopoverContent>
@@ -117,10 +148,17 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Link to="/login">
-                <Button variant="outline" className="hover:bg-slate-200 rounded-3xl">Login</Button>
+                <Button
+                  variant="outline"
+                  className="hover:bg-slate-200 rounded-3xl"
+                >
+                  Login
+                </Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-[#632dc0] hover:bg-[#402176] rounded-3xl">SignUp</Button>
+                <Button className="bg-[#632dc0] hover:bg-[#402176] rounded-3xl">
+                  SignUp
+                </Button>
               </Link>
             </div>
           )}
