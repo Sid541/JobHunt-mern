@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
@@ -12,18 +11,18 @@ import { setSingleCompany } from '@/redux/companySlice'
 
 const CompanyCreate = () => {
     const navigate = useNavigate();
-    const [companyName, setCompanyName] = useState();
+    const [companyName, setCompanyName] = useState(" ");
     const dispatch = useDispatch();
     const registerNewCompany = async () => {
         try {
-            const res = await axios.post("http://localhost:3000/api/v1/company/register", {companyName}, {
+            const res = await axios.post(`http://localhost:3000/api/v1/company/register`, {companyName}, {
                 headers:{
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    
                 },
                 withCredentials:true
             });
-            console.log(res.data);
-            
+            console.log(companyName);
             if(res?.data?.success){
                 dispatch(setSingleCompany(res.data.company));
                 toast.success(res.data.message);
@@ -35,6 +34,8 @@ const CompanyCreate = () => {
             toast.error(error.response.data.message);
         }
     }
+
+    
     return (
         <div>
             <Navbar />
@@ -53,7 +54,7 @@ const CompanyCreate = () => {
                 />
                 <div className='flex items-center gap-2 my-10'>
                     <Button variant="outline" onClick={() => navigate("/admin/companies")}>Cancel</Button>
-                    <Button onClick={registerNewCompany}>Continue</Button>
+                    <Button className="bg-[#632dc0] hover:bg-[#402176]" onClick={registerNewCompany}>Continue</Button>
                 </div>
             </div>
         </div>

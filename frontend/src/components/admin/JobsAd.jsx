@@ -26,7 +26,7 @@ const JobsAd = () => {
                 <div className='flex items-center justify-between my-5'>
                     <Input
                         className="w-fit"
-                        placeholder="Filter by name"
+                        placeholder="Filter by name role..."
                         onChange={(e) => setInput(e.target.value)}
                     />
                     <Button className="bg-[#632dc0] hover:bg-[#402176]" onClick={() => navigate("/admin/jobs/create")}>New Jobs</Button>

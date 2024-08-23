@@ -2,35 +2,36 @@ import { Company } from "../models/company.model.js";
 
 export const registerCompany = async (req, res) => {
   try {
-    const { CompanyName } = req.body;
-    
-    if (!CompanyName) {
-      return res.status(401).json({
-        message: "Company name is required",
-        success: false,
+      const { companyName } = req.body;
+      console.log(companyName);
+      
+      if (!companyName) {
+          return res.status(400).json({
+              message: "Company name is required.",
+              success: false
+          });
+      }
+      let company = await Company.findOne({ name: companyName });
+      if (company) {
+          return res.status(400).json({
+              message: "You can't register same company.",
+              success: false
+          })
+      };
+      company = await Company.create({
+          name: companyName,
+          userId: req.id
       });
-    }
-    let company = await Company.findOne({ name: CompanyName });
-    if (company) {
-      return res.status(401).json({
-        message: "You cannot register same company",
-        success: false,
-      });
-    }
-    company = await Company.create({
-      name: CompanyName,
-      userId: req.id,
-    });
 
-    return res.status(201).json({
-      message: "Company registered successfully",
-      company,
-      success: true,
-    });
+      return res.status(201).json({
+          message: "Company registered successfully.",
+          company,
+          success: true
+      })
   } catch (error) {
-    console.log(error);
+      console.log(error);
   }
-};
+}
 
 export const getCompany = async (req, res) => {
   try {
