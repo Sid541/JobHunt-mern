@@ -3,7 +3,7 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
-const useGetAllAdminJobs = () => {
+const useGetAllJobs = () => {
     const dispatch=useDispatch();
     useEffect(()=>{
         const fetchAllJobs=async()=>{
@@ -25,4 +25,4 @@ const useGetAllAdminJobs = () => {
     },[])
 }
 
-export default useGetAllAdminJobs
+export default useGetAllJobs
