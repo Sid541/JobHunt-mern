@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
-const useGetAllAdminJobs = () => {
+const useGetAllAdminJobs = async() => {
     const dispatch = useDispatch();
     useEffect(()=>{
         const fetchAllAdminJobs = async () => {
@@ -20,6 +20,7 @@ const useGetAllAdminJobs = () => {
             }
         }
         fetchAllAdminJobs();
+        
     },[])
 }
 

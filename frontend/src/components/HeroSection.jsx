@@ -9,8 +9,8 @@ const HeroSection = () => {
     <div className='text-center'>
         <div className='flex flex-col gap-5 my-6'>
       <span className=' mx-auto px-8 py-2 rounded-full bg-gray-200 text-[#f83002] font-bold text-2xl my-3'>NO.1 Job Search Platform</span>
-      <h1 className='text-4xl font-bold'>Search, Apply & <br/>Get Your <span className='text-[#632dc0]'>Dream Job</span></h1>
-      <p className='font-semibold text-[#f83002]'>Unlock Your Future: Find the Job You’ve Been Searching For.
+      <h1 className='text-4xl font-bold'>Search, <span className='text-[#632dc0]'>Apply</span>, and <br/>Get Your <span className='text-[#632dc0]'> Job</span></h1>
+      <p className='font-semibold mt-4 text-[#c23230]'>Unlock Your Future: Find the Job You’ve Been Searching For.
       </p>
       <div className='flex w-1/2  shadow-lg border border-gray-200 pl-6 rounded-full items-center gap-4 mx-auto'>
       

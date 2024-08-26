@@ -29,7 +29,7 @@ const JobsAd = () => {
                         placeholder="Filter by name role..."
                         onChange={(e) => setInput(e.target.value)}
                     />
-                    <Button className="bg-[#632dc0] hover:bg-[#402176]" onClick={() => navigate("/admin/jobs/create")}>New Jobs</Button>
+                    <Button className="bg-[#632dc0] hover:bg-[#402176]" onClick={() => navigate("/admin/jobs/create")}>Add New Job</Button>
                 </div>
                 <JobsAdTable/>
             </div>

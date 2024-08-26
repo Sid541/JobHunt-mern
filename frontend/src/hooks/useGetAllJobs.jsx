@@ -11,7 +11,7 @@ const useGetAllJobs = () => {
                 const res= await axios.get("http://localhost:3000/api/v1/job/get",{
                     withCredentials:true
                 });
-                console.log(res);
+            
                 
                 if(res.data.success){
                    dispatch(setAllJobs(res.data.jobs))
