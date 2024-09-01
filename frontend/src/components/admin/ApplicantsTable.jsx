@@ -22,11 +22,10 @@ const ApplicantsTable = () => {
   const params = useParams();
   const statusHandler = async (status, id) => {
     try {
-        axios.defaults.withCredentials=true;
+      axios.defaults.withCredentials=true;
       const res = await axios.post(
-        `http://localhost:3000/api/v1/application/status/${params.id}/update`,
+        `http://localhost:3000/api/v1/application/status/${id}/update`,
         {status}
-        
       );
       if(res.data.success){
         toast.success(res.data.message);
@@ -80,7 +79,7 @@ const ApplicantsTable = () => {
                     <PopoverContent className="w-32">
                       {shortlistingStatus.map((status, index) => {
                         return (
-                          <div onClick={()=>statusHandler(status,item._id)}
+                          <div onClick={()=>statusHandler(status,item?._id)}
                             key={index}
                             className="flex w-fit items-center my-2 cursor-pointer"
                           >

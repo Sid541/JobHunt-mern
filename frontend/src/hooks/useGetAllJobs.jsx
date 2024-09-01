@@ -1,24 +1,21 @@
-import { setAllJobs } from '@/redux/jobSlice';
+
+import { setAllJobs } from '@/redux/jobSlice'
 import axios from 'axios'
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const useGetAllJobs = () => {
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
+    const {searchedQuery} = useSelector(store=>store.job);
     useEffect(()=>{
-        const fetchAllJobs=async()=>{
+        const fetchAllJobs = async () => {
             try {
-                const res= await axios.get("http://localhost:3000/api/v1/job/get",{
-                    withCredentials:true
-                });
-            
-                
+                const res = await axios.get(`http://localhost:3000/api/v1/job/get?keyword=${searchedQuery}`,{withCredentials:true});
                 if(res.data.success){
-                   dispatch(setAllJobs(res.data.jobs))
+                    dispatch(setAllJobs(res.data.jobs));
                 }
             } catch (error) {
                 console.log(error);
-                
             }
         }
         fetchAllJobs();
