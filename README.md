@@ -1,7 +1,6 @@
 
-Sure! Below is a sample README.md file tailored for your "JobHunt" project with the specified details.
+JOBHUNT
 
-JobHunt
 JobHunt is a job portal application that connects job seekers with recruiters through a streamlined platform. It features two primary dashboards—one for recruiters and one for students. Recruiters can post job openings for their registered companies, and students can browse, apply for jobs, and receive real-time updates on their application status.
 
 Features
