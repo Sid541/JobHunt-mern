@@ -22,73 +22,86 @@ const skills = [
   "MySQL",
 ];
 const isResume = true;
+
 const Profile = () => {
   useGetAppliedJobs();
   
-  const [open, setOpen]=useState(false);
-  const {user}=useSelector(store=>store.auth);
+  const [open, setOpen] = useState(false);
+  const { user } = useSelector(store => store.auth);
 
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen">
       <Navbar />
-      <div className='"max-w-7xl mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-8'>
-        <div className="flex justify-between">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-24 w-24">
+      <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-2xl my-8 p-8 shadow-lg">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-6">
+            <Avatar className="h-32 w-32">
               <AvatarImage
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqQTxgK4s6dLvXDjdU2ptgqQE2ty3g2iapSwm6NxGF9ZXkgXg4qqkzGr8FfTiQD0g9afw&usqp=CAU"
+                src={user?.profile?.profilePhoto}
                 alt="profile"
-              ></AvatarImage>
+              />
             </Avatar>
             <div>
-              <h1 className="font-medium text-xl ">{user?.fullname}</h1>
-              <p>{user?.profile?.bio}</p>
+              <h1 className="text-2xl font-semibold text-gray-800">{user?.fullname}</h1>
+              <p className="text-gray-600 mt-2">{user?.profile?.bio}</p>
             </div>
           </div>
-          <Button className="text-right rounded-2xl" onClick={()=>setOpen(true)} variant="outline">
-            <Pen />
+          <Button
+            className="rounded-full p-2 border-gray-300 text-gray-600 hover:text-gray-800 transition"
+            onClick={() => setOpen(true)}
+            variant="outline"
+          >
+            <Pen size={20} />
           </Button>
         </div>
-        <div className="flex flex-col gap-1 my-5">
-          <div className="flex items-center gap-3 my-2">
-            <Mail />
+
+        <div className="flex flex-col gap-4 mb-6">
+          <div className="flex items-center gap-4 text-gray-700">
+            <Mail size={18} />
             <span>{user?.email}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Contact />
+          <div className="flex items-center gap-4 text-gray-700">
+            <Contact size={18} />
             <span>{user?.phoneNumber}</span>
           </div>
         </div>
-        <div>
-          <h1>Skills</h1>
-          <div className="flex items-center gap-1">
-            {user?.profile?.skills.length !== 0 ? (
-              user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>)
+
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Skills</h2>
+          <div className="flex flex-wrap gap-2">
+            {user?.profile?.skills.length ? (
+              user?.profile?.skills.map((item, index) => (
+                <Badge key={index} className="text-blue-700 bg-blue-100">{item}</Badge>
+              ))
             ) : (
-              <span>N/A</span>
+              <span className="text-gray-500">N/A</span>
             )}
           </div>
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label className="text-md font-bold">Resume</Label>
+
+        <div className="mb-6">
+          <Label className="text-md font-bold text-gray-800">Resume</Label>
           {isResume ? (
             <a
               href={user?.profile?.resume}
-              target="blank"
-              className="text-blue-600 hover:underline cursor-pointer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline ml-3"
             >
-              Mern stack
+              View Resume
             </a>
           ) : (
-            <span>N/A</span>
+            <span className="text-gray-500">N/A</span>
           )}
         </div>
       </div>
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl">
-        <h1 className="font-bold text-lg my-5">Applied Jobs</h1>
+
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl p-8 shadow-lg mb-8">
+        <h1 className="text-xl font-bold text-gray-800 mb-4">Applied Jobs</h1>
         <AppliedJobTable />
       </div>
-      <UpdateProfileBox open={open} setOpen={setOpen}/>
+
+      <UpdateProfileBox open={open} setOpen={setOpen} />
     </div>
   );
 };

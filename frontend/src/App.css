@@ -1,0 +1,85 @@
+/* In your App.css or another CSS file */
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Keyframes for slide-in animation */
+  @keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Keyframes for zoom-in animation */
+  @keyframes zoomIn {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Apply animations */
+  .animate-fadeIn {
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .animate-slideIn {
+    animation: slideIn 1s ease-in-out;
+  }
+  
+  .animate-zoomIn {
+    animation: zoomIn 1s ease-in-out;
+  }
+  
+  
+  @keyframes bouncePulse {
+    0% {
+      transform: scale(1);
+      text-shadow: 0 0 2px rgba(99, 45, 192, 0.5);
+    }
+    50% {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(99, 45, 192, 0.7);
+    }
+    100% {
+      transform: scale(1);
+      text-shadow: 0 0 2px rgba(99, 45, 192, 0.5);
+    }
+  }
+  
+  .animate-title {
+    animation: bouncePulse 2s infinite ease-in-out;
+  }
+  /* Define the keyframes for the carousel animation */
+@keyframes carousel {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  /* Apply the animation to the carousel content */
+  .animate-carousel {
+    display: flex;
+    flex-wrap: nowrap;
+    animation: carousel 20s linear infinite;
+  }
+  

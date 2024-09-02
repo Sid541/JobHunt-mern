@@ -9,7 +9,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LogOut, User2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -20,25 +20,34 @@ const Navbar = () => {
   const { user } = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
 
   const logoutHandler = async () => {
     try {
-        const res = await axios.get(`http://localhost:3000/api/v1/user/logout`, 
-          { withCredentials: true 
-
-          });
-          console.log(res.data);
-          
-        if (res.data.success) {
-            dispatch(setUser(null));
-            navigate("/");
-            toast.success(res.data.message);
-        }
+      const res = await axios.get("http://localhost:3000/api/v1/user/logout", 
+        { withCredentials: true }
+      );
+      console.log(res.data);
+      
+      if (res.data.success) {
+        dispatch(setUser(null));
+        navigate("/");
+        toast.success(res.data.message);
+      }
     } catch (error) {
-        console.log(error);
-        toast.error(error.response.data.message);
+      console.log(error);
+      toast.error(error.response.data.message);
     }
-}
+  };
+
+  // Function to determine if the link is active
+  const isActive = (path) => location.pathname === path ? 'text-[#5426a3] font-bold' : 'hover:text-[#5426a3]';
+
+  // Function to get initials from the full name
+  const getInitials = (name) => {
+    if (!name) return "";
+    return name.split(" ").map(n => n[0]).join("").toUpperCase();
+  };
 
   return (
     <div className="bg-white">
@@ -52,20 +61,20 @@ const Navbar = () => {
           </h1>
         </Link>
         <div className="flex items-center gap-10">
-          <ul className="flex font-medium items-center gap-7 cursor-pointer ">
-            {user && user.role == "recruiter" ? (
+          <ul className="flex font-medium items-center gap-7 cursor-pointer">
+            {user && user.role === "recruiter" ? (
               <>
-                <li className="hover:text-[#5426a3]">
+                <li className={`text-sm ${isActive('/admin/companies')}`}>
                   <Link to="/admin/companies">
-                    <span className="text-sm mx-1">
+                    <span className="mx-1">
                       <FontAwesomeIcon icon={faHouse} />
                     </span>
                     Companies
                   </Link>
                 </li>
-                <li className="hover:text-[#5426a3]">
+                <li className={`text-sm ${isActive('/admin/jobs')}`}>
                   <Link to="/admin/jobs">
-                    <span className="text-sm mx-1">
+                    <span className="mx-1">
                       <FontAwesomeIcon icon={faBriefcase} />
                     </span>
                     Jobs
@@ -74,25 +83,25 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <li className="hover:text-[#5426a3]">
+                <li className={`text-sm ${isActive('/')}`}>
                   <Link to="/">
-                    <span className="text-sm mx-1">
+                    <span className="mx-1">
                       <FontAwesomeIcon icon={faHouse} />
                     </span>
                     Home
                   </Link>
                 </li>
-                <li className="hover:text-[#5426a3]">
+                <li className={`text-sm ${isActive('/jobs')}`}>
                   <Link to="/jobs">
-                    <span className="text-sm mx-1">
+                    <span className="mx-1">
                       <FontAwesomeIcon icon={faBriefcase} />
                     </span>
                     Jobs
                   </Link>
                 </li>
-                <li className="hover:text-[#5426a3]">
+                <li className={`text-sm ${isActive('/browse')}`}>
                   <Link to="/browse">
-                    <span className="text-sm mx-1">
+                    <span className="mx-1">
                       <FontAwesomeIcon icon={faWindowMaximize} />
                     </span>
                     Browse
@@ -105,27 +114,38 @@ const Navbar = () => {
             <Popover>
               <PopoverTrigger>
                 <Avatar className="cursor-pointer">
-                  <AvatarImage src={user?.profile?.profilePhoto} />
-                  <AvatarFallback>CN</AvatarFallback>
+                  {user?.profile?.profilePhoto ? (
+                    <AvatarImage src={user?.profile?.profilePhoto} />
+                  ) : (
+                    <AvatarFallback className="bg-[#d61a6e] text-white">
+                      {getInitials(user?.fullname)}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80">
                 <div className="flex gap-2 space-y-2">
                   <Avatar className="cursor-pointer">
-                    <AvatarImage
-                      src={user?.profile?.profilePhoto}
-                      alt="@shadcn"
-                    />
+                    {user?.profile?.profilePhoto ? (
+                      <AvatarImage
+                        src={user?.profile?.profilePhoto}
+                        alt={user?.fullname}
+                      />
+                    ) : (
+                      <AvatarFallback className="bg-[#d61a6e] text-white">
+                        {getInitials(user?.fullname)}
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                   <div>
                     <h4 className="font-medium">{user?.fullname}</h4>
                     <p className="text-sm text-muted-foreground">
-                      {user?.profile.bio}
+                      {user?.profile?.bio}
                     </p>
                   </div>
                 </div>
                 <div className="my-2 flex flex-col text-gray-600">
-                  {user && user.role == "student" && (
+                  {user && user.role === "student" && (
                     <div className="flex w-fit items-center cursor-pointer">
                       <User2 />
                       <Link to="/profile">

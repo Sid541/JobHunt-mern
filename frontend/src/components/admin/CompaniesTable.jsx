@@ -18,60 +18,69 @@ const CompaniesTable = () => {
   const { companies, searchCompanyByText } = useSelector(
     (store) => store.company
   );
-  const [filerCompany, setFilterCompany] = useState(companies);
-  const navigate=useNavigate();
+  const [filteredCompanies, setFilteredCompanies] = useState(companies);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredCompany =
-      companies?.length >= 0 &&
-      companies.filter((company) => {
-        if (!searchCompanyByText) {
-          return true;
-        }
-        return company?.name
-          ?.toLowerCase()
-          .includes(searchCompanyByText.toLowerCase());
-      });
-      setFilterCompany(filteredCompany)
+    const filtered = companies?.filter((company) => {
+      if (!searchCompanyByText) {
+        return true;
+      }
+      return company?.name
+        ?.toLowerCase()
+        .includes(searchCompanyByText.toLowerCase());
+    });
+    setFilteredCompanies(filtered);
   }, [companies, searchCompanyByText]);
+
   return (
-    <div>
+    <div className="bg-white p-6 rounded-lg shadow-lg">
       <Table>
-        <TableCaption>A list of your recent registered companies</TableCaption>
+        <TableCaption>A list of your recently registered companies</TableCaption>
         <TableHeader>
-          <TableRow className="font-semibold text-xl">
-            <TableHead>Logo</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+          <TableRow className="bg-gray-50 text-gray-800 border-b border-gray-200">
+            <TableHead className="font-semibold">Logo</TableHead>
+            <TableHead className="font-semibold">Name</TableHead>
+            <TableHead className="font-semibold">Date</TableHead>
+            <TableHead className="text-right font-semibold">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {
-          filerCompany?.map((company) => (
-            <tr>
-              <TableCell>
-                <Avatar>
-                  <AvatarImage src={company.logo}></AvatarImage>
-                </Avatar>
+          {filteredCompanies?.length ? (
+            filteredCompanies.map((company) => (
+              <TableRow key={company._id} className="hover:bg-gray-50 transition-colors">
+                <TableCell>
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={company.logo} alt={company.name} />
+                  </Avatar>
+                </TableCell>
+                <TableCell className="font-medium text-gray-800">{company.name}</TableCell>
+                <TableCell>{new Date(company.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell className="text-right">
+                  <Popover>
+                    <PopoverTrigger>
+                      <MoreHorizontal className="cursor-pointer text-gray-600 hover:text-gray-900 transition-colors" />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-32 bg-white border border-gray-200 rounded-lg shadow-lg p-2">
+                      <div
+                        className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer rounded-md"
+                        onClick={() => navigate(`/admin/companies/${company._id}`)}
+                      >
+                        <Edit2 className="text-gray-600" />
+                        <span className="text-gray-800">Edit</span>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan="4" className="text-center py-4 text-gray-500">
+                No companies found
               </TableCell>
-              <TableCell className="font-semibold text-md">{company.name}</TableCell>
-              <TableCell>{company.createdAt.split("T")[0]}</TableCell>
-              <TableCell className="text-right">
-                <Popover>
-                  <PopoverTrigger>
-                    <MoreHorizontal />
-                  </PopoverTrigger>
-                  <PopoverContent className="w-32">
-                    <div className="flex items-center gap-2 w-fit cursor-pointer" onClick={()=>navigate(`/admin/companies/${company._id}`)}>
-                      <Edit2 className="w-4" />
-                      <span>Edit</span>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </TableCell>
-            </tr>
-          ))}
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

@@ -12,13 +12,15 @@ const Home = () => {
   useGetAllJobs();
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (user?.role == "recruiter") {
+    if (user?.role === "recruiter") {
       navigate("/admin/companies");
     }
-  }, []);
+  }, [user, navigate]);
+
   return (
-    <div>
+    <div className="bg-[#F7F8FA]"> {/* Change the background color here */}
       <Navbar />
       <HeroSection />
       <CategoryCarousel />
