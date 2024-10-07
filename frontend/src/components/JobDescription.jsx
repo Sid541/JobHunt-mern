@@ -51,7 +51,6 @@ const JobDescription = () => {
         );
         if (res.data.success) {
           dispatch(setSingleJob(res.data.job));
-          // Ensure the state is in sync with fetched data
         }
       } catch (error) {
         console.log(error);
@@ -61,80 +60,68 @@ const JobDescription = () => {
   }, [jobId, dispatch, user?._id]);
 
   return (
-    <div className="max-w-7xl mx-auto my-10">
-      <div className="flex items-center justify-between">
+    <div className="max-w-6xl mx-auto my-12 p-6 bg-white shadow-lg rounded-lg">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-bold text-xl">{singleJob?.title}</h1>
-          <div className="flex items-center gap-2 mt-4">
-            <Badge className={"text-blue-700 font-bold"} variant="ghost">
+          <h1 className="text-2xl font-semibold text-gray-900">{singleJob?.title}</h1>
+          <div className="flex items-center gap-3 mt-4">
+            <Badge className="text-blue-600 font-medium" variant="ghost">
               {singleJob?.postion} Positions
             </Badge>
-            <Badge className={"text-[#F83002] font-bold"} variant="ghost">
+            <Badge className="text-red-500 font-medium" variant="ghost">
               {singleJob?.jobType}
             </Badge>
-            <Badge className={"text-blue-900 font-bold"} variant="ghost">
-              {singleJob?.salary}LPA
+            <Badge className="text-green-600 font-medium" variant="ghost">
+              {singleJob?.salary} LPA
             </Badge>
           </div>
         </div>
         <Button
           onClick={isApplied ? null : applyJobHandler}
           disabled={isApplied}
-          className={`rounded-lg ${
+          className={`px-6 py-2 rounded-md ${
             isApplied
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-[#632dc0] hover:bg-[#402176]"
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-[#632dc0] hover:bg-[#402176] text-white"
           }`}
         >
           {isApplied ? "Already Applied" : "Apply Now"}
         </Button>
       </div>
-      <h1 className="border-b-2 border-b-gray-300 font-medium py-4">
+
+      <h2 className="text-xl font-semibold border-b border-gray-200 pb-3 mb-6">
         Job Description
-      </h1>
-      <div className="my-4">
-        <h1 className="font-bold my-1">
+      </h2>
+      
+      <div className="space-y-4 text-gray-700">
+        <h3 className="text-lg font-medium">
           Role:{" "}
-          <span className="pl-4 font-normal text-gray-800">
-            {singleJob?.title}
-          </span>
-        </h1>
-        <h1 className="font-bold my-1">
+          <span className="font-normal">{singleJob?.title}</span>
+        </h3>
+        <h3 className="text-lg font-medium">
           Location:{" "}
-          <span className="pl-4 font-normal text-gray-800">
-            {singleJob?.location}
-          </span>
-        </h1>
-        <h1 className="font-bold my-1">
+          <span className="font-normal">{singleJob?.location}</span>
+        </h3>
+        <h3 className="text-lg font-medium">
           Description:{" "}
-          <span className="pl-4 font-normal text-gray-800">
-            {singleJob?.description}
-          </span>
-        </h1>
-        <h1 className="font-bold my-1">
+          <span className="font-normal">{singleJob?.description}</span>
+        </h3>
+        <h3 className="text-lg font-medium">
           Experience:{" "}
-          <span className="pl-4 font-normal text-gray-800">
-            {singleJob?.experience} yrs
-          </span>
-        </h1>
-        <h1 className="font-bold my-1">
+          <span className="font-normal">{singleJob?.experience} yrs</span>
+        </h3>
+        <h3 className="text-lg font-medium">
           Salary:{" "}
-          <span className="pl-4 font-normal text-gray-800">
-            {singleJob?.salary}LPA
-          </span>
-        </h1>
-        <h1 className="font-bold my-1">
+          <span className="font-normal">{singleJob?.salary} LPA</span>
+        </h3>
+        <h3 className="text-lg font-medium">
           Total Applicants:{" "}
-          <span className="pl-4 font-normal text-gray-800">
-            {singleJob?.applications?.length}
-          </span>
-        </h1>
-        <h1 className="font-bold my-1">
+          <span className="font-normal">{singleJob?.applications?.length}</span>
+        </h3>
+        <h3 className="text-lg font-medium">
           Posted Date:{" "}
-          <span className="pl-4 font-normal text-gray-800">
-            {singleJob?.createdAt.split("T")[0]}
-          </span>
-        </h1>
+          <span className="font-normal">{singleJob?.createdAt.split("T")[0]}</span>
+        </h3>
       </div>
     </div>
   );
