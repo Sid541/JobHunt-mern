@@ -24,7 +24,7 @@ app.use(cookieParser());
 // Exact Production URLs & Local workspace addresses
 const allowedOrigins = [
     process.env.FRONTEND_URL,                                                      // Main Production Link
-    "https://job-hunt-mern-z346-eivp9vfrj-sid541s-projects.vercel.app",           // This specific Vercel URL
+    "https://job-hunt-mern-la9rm33lf-sid541s-projects.vercel.app",           // This specific Vercel URL
     "http://localhost:5173"                                                        // Local Development Work space
 ];
 
