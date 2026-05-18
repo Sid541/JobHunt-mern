@@ -1,6 +1,6 @@
 import cookieParser from "cookie-parser";
 import express from "express";
-const app= express();
+const app = express();
 import cors from "cors";
 import dotenv from "dotenv"
 dotenv.config({});
@@ -10,25 +10,37 @@ import companyRoute from "./routes/company.route.js"
 import jobRoute from "./routes/job.route.js"
 import applicationRoute from "./routes/application.route.js"
 
-//middleware
+// middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// CORS configuration
+const allowedOrigins = [
+    process.env.FRONTEND_URL,              // production frontend URL from env
+    "http://localhost:5173",               // local development
+    "https://jobhunt-mern-3.onrender.com"  // your live frontend URL
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173',  // Allow requests from this origin
-    credentials: true  // Allow cookies and headers to be sent
-  }));
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 
-const PORT=process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
-app.use("/api/v1/user", userRoute)
+app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
-app.use("/api/v1/job", jobRoute)
+app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
-
-app.listen(PORT,()=>
-    {connectDB();
-    console.log("Server started at 3000")}
-);
+app.listen(PORT, () => {
+    connectDB();
+    console.log(`Server started at port ${PORT}`);
+});
