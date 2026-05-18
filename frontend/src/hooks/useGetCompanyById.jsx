@@ -1,4 +1,4 @@
-import { COMPANY_API_END_POINT } from "../utils/constant";
+import { COMPANY_API_END_POINT } from "@/utils/constant";
 import { setSingleCompany } from '@/redux/companySlice'
 import axios from 'axios'
 import { useEffect } from 'react'
