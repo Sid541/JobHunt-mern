@@ -1,14 +1,16 @@
+import dotenv from "dotenv"
+dotenv.config({});  // ← FIRST before everything
+
 import cookieParser from "cookie-parser";
 import express from "express";
-const app = express();
 import cors from "cors";
-import dotenv from "dotenv"
-dotenv.config({});
 import connectDB from "./utils/db.js";
 import userRoute from "./routes/user.route.js"
 import companyRoute from "./routes/company.route.js"
 import jobRoute from "./routes/job.route.js"
 import applicationRoute from "./routes/application.route.js"
+
+const app = express();
 
 // middleware
 app.use(express.json());
@@ -17,9 +19,9 @@ app.use(cookieParser());
 
 // CORS configuration
 const allowedOrigins = [
-    process.env.FRONTEND_URL,              // production frontend URL from env
-    "http://localhost:5173",               // local development
-    "https://jobhunt-mern-3.onrender.com"  // your live frontend URL
+    process.env.FRONTEND_URL,
+    "http://localhost:5173",
+    "https://jobhunt-mern-3.onrender.com"
 ];
 
 app.use(cors({
