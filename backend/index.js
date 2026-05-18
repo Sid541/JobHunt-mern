@@ -35,6 +35,13 @@ app.use(cors({
 
 const PORT = process.env.PORT || 3000;
 
+app.get("/test", (req, res) => {
+    res.json({ 
+        FRONTEND_URL: process.env.FRONTEND_URL,
+        PORT: process.env.PORT
+    });
+});
+
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);

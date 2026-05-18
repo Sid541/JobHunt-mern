@@ -77,7 +77,6 @@ const appRouter= createBrowserRouter([
 ])
 
 function App() {
-  console.log(process.env.VITE_API_URL)
   return (
     <>
       <RouterProvider router={appRouter}/>
