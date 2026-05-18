@@ -12,7 +12,7 @@ import useGetCompanyById from "@/hooks/useGetCompanyById";
 
 const CompanySetup = () => {
   const params = useParams();
-  useGetCompanyById(params.id)
+  useGetCompanyById(params.id);
   
   const [input, setInput] = useState({
     name: "",
@@ -23,8 +23,9 @@ const CompanySetup = () => {
   });
 
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
+  const { singleCompany } = useSelector(store => store.company);
+
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -34,7 +35,17 @@ const CompanySetup = () => {
     setInput({ ...input, file });
   };
 
-  const {singleCompany}=useSelector(store=>store.company);
+  useEffect(() => {
+    if (singleCompany) {
+      setInput({
+        name: singleCompany.name || "",
+        description: singleCompany.description || "",
+        website: singleCompany.website || "",
+        location: singleCompany.location || "",
+        file: singleCompany.file || null,
+      });
+    }
+  }, [singleCompany]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -46,109 +57,101 @@ const CompanySetup = () => {
     if (input.file) {
       formData.append("file", input.file);
     }
+
     try {
       setLoading(true);
-      const res = await axios.put(
-        `http://localhost:3000/api/v1/company/update/${params.id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      const res = await axios.put(`http://localhost:3000/api/v1/company/update/${params.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true
+      });
       if (res.data.success) {
         toast.success(res.data.message);
         navigate("/admin/companies");
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    setInput({
-        name: singleCompany.name || "",
-        description: singleCompany.description || "",
-        website: singleCompany.website || "",
-        location: singleCompany.location || "",
-        file: singleCompany.file || null
-    })
-},[singleCompany]);
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0F1424] to-[#0B1120] text-gray-200">
       <Navbar />
-      <div className="max-w-xl mx-auto my-8 border shadow-xl p-7">
-        <form onSubmit={submitHandler}>
-          <div className="flex items-center gap-5 p-8">
+      <div className="max-w-3xl mx-auto my-10 px-6">
+        <form onSubmit={submitHandler} className="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl shadow-2xl">
+          <div className="flex items-center gap-4 mb-8">
             <Button
+              type="button"
+              variant="ghost"
               onClick={() => navigate("/admin/companies")}
-              variant="outline"
-              className="flex items-center gap-2 text-gray-500 font-semibold mr-3"
+              className="text-gray-400 hover:text-white hover:bg-white/10 rounded-xl"
             >
-              <ArrowLeft />
-              <span>Back</span>
+              <ArrowLeft className="h-5 w-5 mr-1" /> Back
             </Button>
-            <h1 className="font-bold text-2xl">Company Setup</h1>
+            <h1 className="font-bold text-2xl text-white">Company Setup</h1>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Company Name</Label>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label className="text-gray-300 font-medium">Company Name</Label>
               <Input
                 type="text"
                 name="name"
                 value={input.name}
                 onChange={changeEventHandler}
+                className="bg-[#141b2d] border-white/10 text-white focus:border-[#632dc0] focus:ring-1 focus:ring-[#632dc0] rounded-xl"
               />
             </div>
-            <div>
-              <Label>Description</Label>
-              <Input
-                type="text"
-                name="description"
-                value={input.description}
-                onChange={changeEventHandler}
-              />
-            </div>
-            <div>
-              <Label>Website</Label>
+            <div className="space-y-2">
+              <Label className="text-gray-300 font-medium">Website</Label>
               <Input
                 type="text"
                 name="website"
                 value={input.website}
                 onChange={changeEventHandler}
+                className="bg-[#141b2d] border-white/10 text-white focus:border-[#632dc0] focus:ring-1 focus:ring-[#632dc0] rounded-xl"
               />
             </div>
-            <div>
-              <Label>Location</Label>
+            <div className="space-y-2 col-span-2">
+              <Label className="text-gray-300 font-medium">Description</Label>
+              <Input
+                type="text"
+                name="description"
+                value={input.description}
+                onChange={changeEventHandler}
+                className="bg-[#141b2d] border-white/10 text-white focus:border-[#632dc0] focus:ring-1 focus:ring-[#632dc0] rounded-xl"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-300 font-medium">Location</Label>
               <Input
                 type="text"
                 name="location"
                 value={input.location}
                 onChange={changeEventHandler}
+                className="bg-[#141b2d] border-white/10 text-white focus:border-[#632dc0] focus:ring-1 focus:ring-[#632dc0] rounded-xl"
               />
             </div>
-            <div>
-              <Label>Logo</Label>
+            <div className="space-y-2">
+              <Label className="text-gray-300 font-medium">Logo Thumbnail</Label>
               <Input
                 type="file"
                 accept="image/*"
                 onChange={changeFileHandler}
+                className="bg-[#141b2d] border-white/10 text-white file:text-purple-400 file:font-semibold hover:file:bg-white/5 cursor-pointer rounded-xl"
               />
             </div>
           </div>
+
           {loading ? (
-            <Button className="w-full my-4">
-              {" "}
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+            <Button disabled className="w-full mt-8 bg-purple-800 text-white rounded-xl py-6 flex items-center justify-center gap-2">
+              <Loader2 className="h-5 w-5 animate-spin" /> Please wait
             </Button>
           ) : (
-            <Button type="submit" className="w-full my-4 bg-[#632dc0] hover:bg-[#402176]">
-              Update
+            <Button type="submit" className="w-full mt-8 bg-gradient-to-r from-[#632dc0] to-[#4b1fa3] hover:from-[#4b1fa3] hover:to-[#381480] text-white font-semibold py-6 rounded-xl transition-all shadow-lg shadow-purple-950/50">
+              Update Details
             </Button>
           )}
         </form>

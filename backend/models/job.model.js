@@ -3,46 +3,42 @@ import mongoose from "mongoose";
 const jobSchema = mongoose.Schema({
     title:{
         type: String,
-        required: true
+        required: [true, "Job title is required."]
     },
     description:{
         type: String,
-        required: true
+        required: [true, "Job description is required."]
     },
     salary:{
         type: Number,
-        required: true
+        required: [true, "Salary is required."]
     },
     position:{
-        type:String,
-        
+        type: String,
     },
     requirements:[{
-        type:String,
-        
+        type: String,
     }],
     location:{
         type: String,
-        required: true
+        required: [true, "Location is required."]
     },
     jobType:{
         type: String,
-        
     },
     experience:{
         type: Number,
-        
     },
     company:{
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId, // 💡 Pro-Tip: Changed .ObjectId to .Types.ObjectId for uniformity
         ref: 'Company',
-       
-
     },
+    // 🛡️ PERMANENT FIX: Adding strict 'required' validation here.
+    // MongoDB will now actively block data insertion if a recruiter ID is missing.
     created_by: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        
+        required: [true, "A job cannot be created without a valid recruiter (User) reference."]
     },
     applications: [
         {
@@ -51,4 +47,5 @@ const jobSchema = mongoose.Schema({
         }
     ]
 },{timestamps:true});
+
 export const Job = mongoose.model("Job", jobSchema);

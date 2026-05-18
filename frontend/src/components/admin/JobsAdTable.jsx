@@ -19,59 +19,54 @@ const JobsAdTable = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredJobs = allAdminJobs.filter((job) => {
-      if (!searchJobByText) {
-        return true;
-      }
+    const filtered = allAdminJobs.filter((job) => {
+      if (!searchJobByText) return true;
       return (
         job?.title?.toLowerCase().includes(searchJobByText.toLowerCase()) ||
-        job?.company?.name.toLowerCase().includes(searchJobByText.toLowerCase())
+        job?.company?.name?.toLowerCase().includes(searchJobByText.toLowerCase())
       );
     });
-    setFilteredJobs(filteredJobs);
+    setFilteredJobs(filtered);
   }, [allAdminJobs, searchJobByText]);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="backdrop-blur-md bg-white/5 border border-white/10 p-6 rounded-2xl shadow-2xl overflow-hidden">
       <Table>
-        <TableCaption>A list of your recent posted jobs</TableCaption>
+        <TableCaption className="text-gray-400 mt-4">A list of your recently posted jobs</TableCaption>
         <TableHeader>
-          <TableRow className="bg-gray-50 text-gray-800 border-b border-gray-200">
-            <TableHead className="font-semibold">Company Name</TableHead>
-            <TableHead className="font-semibold">Role</TableHead>
-            <TableHead className="font-semibold">Date</TableHead>
-            <TableHead className="text-right font-semibold">Action</TableHead>
+          <TableRow className="border-b border-white/10 hover:bg-transparent">
+            <TableHead className="text-gray-300 font-semibold">Company Name</TableHead>
+            <TableHead className="text-gray-300 font-semibold">Role</TableHead>
+            <TableHead className="text-gray-300 font-semibold">Date Posted</TableHead>
+            <TableHead className="text-right text-gray-300 font-semibold">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredJobs.length > 0 ? (
+          {filteredJobs?.length > 0 ? (
             filteredJobs.map((job) => (
-              <TableRow
-                key={job._id}
-                className="hover:bg-gray-50 transition-colors"
-              >
-                <TableCell className="text-gray-800">{job?.company?.name}</TableCell>
-                <TableCell className="text-gray-800">{job?.title}</TableCell>
-                <TableCell className="text-gray-600">{new Date(job?.createdAt).toLocaleDateString()}</TableCell>
+              <TableRow key={job._id} className="border-b border-white/5 hover:bg-white/5 transition-colors duration-200">
+                <TableCell className="font-medium text-white">{job?.company?.name}</TableCell>
+                <TableCell className="text-purple-300 font-medium">{job?.title}</TableCell>
+                <TableCell className="text-gray-300">{job?.createdAt ? new Date(job.createdAt).toLocaleDateString() : 'N/A'}</TableCell>
                 <TableCell className="text-right">
                   <Popover>
                     <PopoverTrigger>
-                      <MoreHorizontal className="text-gray-600 hover:text-gray-900 transition-colors cursor-pointer" />
+                      <MoreHorizontal className="cursor-pointer text-gray-400 hover:text-white transition-colors p-1 rounded-md hover:bg-white/10" />
                     </PopoverTrigger>
-                    <PopoverContent className="w-36 bg-white border border-gray-200 rounded-lg shadow-lg p-2">
+                    <PopoverContent className="w-36 bg-[#121826] border border-white/10 rounded-xl shadow-xl p-2 text-gray-200 space-y-1">
                       <div
-                        onClick={() => navigate(`/admin/jobs/${job._id}`)}
-                        className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer rounded-md"
+                        onClick={() => navigate(`/admin/jobs/edit/${job._id}`)} // Updated route format
+                        className="flex items-center gap-2 px-2 py-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors"
                       >
-                        <Edit2 className="text-gray-600" />
-                        <span className="text-gray-800">Edit</span>
+                        <Edit2 size={15} className="text-cyan-400" />
+                        <span className="text-sm font-medium">Edit Job</span>
                       </div>
                       <div
                         onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
-                        className="flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer rounded-md mt-2"
+                        className="flex items-center gap-2 px-2 py-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors"
                       >
-                        <Eye className="text-gray-600" />
-                        <span className="text-gray-800">Applicants</span>
+                        <Eye size={15} className="text-purple-400" />
+                        <span className="text-sm font-medium">Applicants</span>
                       </div>
                     </PopoverContent>
                   </Popover>
@@ -80,7 +75,7 @@ const JobsAdTable = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan="4" className="text-center py-4 text-gray-500">
+              <TableCell colSpan="4" className="text-center py-8 text-gray-400">
                 No jobs found
               </TableCell>
             </TableRow>

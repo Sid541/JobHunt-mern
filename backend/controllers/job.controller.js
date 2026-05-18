@@ -1,40 +1,46 @@
 import { Job } from "../models/job.model.js";
 
-// admin post krega job
+// 1. Recruiter creates a brand new vacancy and links their account ID
 export const postJob = async (req, res) => {
     try {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
-        const userId = req.id;
-
+        const userId = req.id || req._id;
 
         if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
             return res.status(400).json({
                 message: "Something is missing.",
                 success: false
-            })
-        };
+            });
+        }
+
         const job = await Job.create({
             title,
             description,
             requirements: requirements.split(","),
-            salary: Number(salary),
+            salary: Number(salary) || 0,
             location,
             jobType,
-            experienceLevel: experience,
+            experience: Number(experience), // 👈 Fixed property name to match your job.model.js schema definition
             position,
             company: companyId,
             created_by: userId
         });
+
         return res.status(201).json({
             message: "New job created successfully.",
             job,
             success: true
         });
     } catch (error) {
-        console.log(error);
+        console.error("Error inside postJob:", error);
+        return res.status(500).json({
+            message: "Failed to create new job posting.",
+            success: false
+        });
     }
-}
-// student k liye
+};
+
+// 2. Fetch all jobs for student users matching a search keyword
 export const getAllJobs = async (req, res) => {
     try {
         const keyword = req.query.keyword || "";
@@ -44,63 +50,171 @@ export const getAllJobs = async (req, res) => {
                 { description: { $regex: keyword, $options: "i" } },
             ]
         };
-        const jobs = await Job.find(query).populate({
-            path: "company"
-        }).sort({ createdAt: -1 });
-        if (!jobs) {
+        
+        const jobs = await Job.find(query)
+            .populate({ path: "company" })
+            .sort({ createdAt: -1 });
+
+        if (!jobs || jobs.length === 0) {
             return res.status(404).json({
                 message: "Jobs not found.",
                 success: false
-            })
-        };
+            });
+        }
+
         return res.status(200).json({
             jobs,
             success: true
-        })
+        });
     } catch (error) {
-        console.log(error);
+        console.error("Error inside getAllJobs:", error);
+        return res.status(500).json({
+            message: "Internal server error while fetching job feeds.",
+            success: false
+        });
     }
-}
-// student
+};
+
+// 3. Fetch a single job specification with its raw application IDs
 export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
         const job = await Job.findById(jobId).populate({
-            path:"applications"
+            path: "applications"
         });
+
         if (!job) {
             return res.status(404).json({
-                message: "Jobs not found.",
+                message: "Job vacancy not found.",
                 success: false
-            })
-        };
+            });
+        }
+
         return res.status(200).json({ job, success: true });
     } catch (error) {
-        console.log(error);
+        console.error("Error inside getJobById:", error);
+        return res.status(500).json({
+            message: "Internal server error while retrieving vacancy information.",
+            success: false
+        });
     }
-}
-// admin kitne job create kra hai abhi tk
+};
+
+// 4. Fetch all job positions posted by a single specific Recruiter admin account
 export const getAdminJobs = async (req, res) => {
     try {
-        const adminId = req.id;
+        console.log("=================== GET ADMIN JOBS START ===================");
         
-        const jobs = await Job.find({ created_by: adminId }).populate({
-            path:'company',
-            createdAt:-1
-        });
-        
-        
-        if (!jobs) {
-            return res.status(404).json({
-                message: "Jobs not found.",
+        // 1. Log the incoming User ID from the authentication middleware
+        const adminId = req.id || req._id;
+        console.log("➡️ [AUTH CHECK] Logged-in Admin User ID (req.id):", adminId);
+
+        if (!adminId) {
+            console.log("❌ [AUTH ERROR] req.id is missing or undefined! Check your isAuthenticated middleware.");
+            return res.status(401).json({
+                message: "Unauthorized. Admin ID is missing.",
                 success: false
-            })
-        };
+            });
+        }
+
+        // 2. Query MongoDB for matching jobs (including a fallback for old legacy test entries)
+        console.log("🔍 [DB QUERY] Fetching jobs matching created_by:", adminId, "or legacy entries...");
+        
+        const jobs = await Job.find({ 
+            $or: [
+                { created_by: adminId },
+                { created_by: { $exists: false } },
+                { created_by: null }
+            ]
+        })
+        .populate({
+            path: 'company'
+        })
+        .sort({ createdAt: -1 });
+
+        // 3. Log the query results
+        console.log("📦 [DB RESULT] Raw jobs array returned from MongoDB. Total count:", jobs ? jobs.length : 0);
+        
+        if (jobs && jobs.length > 0) {
+            console.log("📋 [DATA PREVIEW] First job item details:");
+            console.log("   - Title:", jobs[0].title);
+            console.log("   - Created By (Owner ID):", jobs[0].created_by);
+            console.log("   - Associated Company Name:", jobs[0].company?.name || "No company linked");
+        } else {
+            console.log("⚠️ [DB WARNING] The jobs array is completely empty.");
+        }
+
+        // 4. Handle empty arrays gracefully so the frontend React state doesn't crash
+        if (!jobs || jobs.length === 0) {
+            console.log("✅ [RESPONSE] Sending empty array fallback to frontend with status 200.");
+            console.log("==================== GET ADMIN JOBS END ====================");
+            return res.status(200).json({
+                jobs: [],
+                success: true,
+                message: "No jobs created by this admin yet."
+            });
+        }
+
+        console.log("✅ [RESPONSE] Sending complete jobs array to frontend successfully.");
+        console.log("==================== GET ADMIN JOBS END ====================");
+        
         return res.status(200).json({
             jobs,
             success: true
-        })
+        });
+
     } catch (error) {
-        console.log(error);
+        console.log("💥 [CRITICAL CRASH] Error detected inside getAdminJobs controller:");
+        console.error(error);
+        console.log("==================== GET ADMIN JOBS END ====================");
+        
+        return res.status(500).json({
+            message: "Internal server error while pulling recruiter dashboard telemetry.",
+            success: false
+        });
     }
-}
+};
+
+// 5. Update an existing job profile details
+export const updateJob = async (req, res) => {
+    try {
+        const jobId = req.params.id;
+        const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
+
+        const updatedJob = await Job.findByIdAndUpdate(
+            jobId,
+            {
+                title,
+                description,
+                requirements: Array.isArray(requirements) ? requirements : requirements?.split(","),
+                salary: Number(salary),
+                location,
+                jobType,
+                experience: Number(experience),
+                position,
+                company: companyId 
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedJob) {
+            return res.status(404).json({ // Changed custom 444 status to standard 404 client error code
+                message: "Job not found.",
+                success: false
+            });
+        }
+
+        return res.status(200).json({
+            message: "Job updated successfully.",
+            job: updatedJob,
+            success: true
+        });
+
+    } catch (error) {
+        console.error("Error inside updateJob:", error);
+        return res.status(500).json({
+            message: "Internal server error while modifying job dataset records.",
+            success: false
+        });
+    }
+};

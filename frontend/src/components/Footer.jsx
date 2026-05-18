@@ -1,42 +1,141 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faSuitcase } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  Send, 
+  Github, 
+  Linkedin, 
+  Twitter, 
+  Facebook, 
+  Globe, 
+  ShieldCheck 
+} from 'lucide-react';
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    // Handle newsletter subscription logic here
+    setEmail("");
+  };
+
   return (
-    <footer className="bg-[#632dc0] text-gray-300 py-8">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-6 md:mb-0">
-            <h1 className="text-3xl font-bold text-white flex items-center">
-              Job<span className="text-[#ffcc00]">Hunt</span>
-              <span className="text-xl ml-2">
-                <FontAwesomeIcon icon={faSuitcase} />
+    <footer className="bg-[#070B14] border-t border-white/5 text-gray-400 pt-16 pb-8 mt-auto relative overflow-hidden">
+      {/* Subtle Background Glow Accent */}
+      <div className="absolute bottom-0 right-0 w-72 h-72 bg-indigo-600/5 rounded-full filter blur-[100px] pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Top Section: Branding, Links, and Newsletter */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/5">
+          
+          {/* Column 1: Branding & Intro */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            <Link to="/" className="w-fit">
+              <h1 className="text-2xl font-bold text-white flex items-center gap-1 hover:opacity-90 transition-opacity">
+                Job<span className="text-[#6366f1]">Hunt</span>
+                <span className="text-sm text-cyan-400 ml-1">
+                  <FontAwesomeIcon icon={faSuitcase} />
+                </span>
+              </h1>
+            </Link>
+            <p className="text-sm text-gray-400 max-w-sm leading-relaxed">
+              The next-generation, AI-driven job searching ecosystem engineered to seamlessly match elite talent directly with global enterprise tech offers.
+            </p>
+            {/* Live Infrastructure System Status Dot */}
+            <div className="flex items-center gap-2 mt-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg w-fit">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-            </h1>
-            <p className="text-sm mt-2">&copy; 2024 Your Company. All rights reserved.</p>
-            <p className="text-sm mt-1">
-              Created with <span className="text-red-500"><FontAwesomeIcon icon={faHeart} /></span> by Siddharth
+              <span className="text-xs font-semibold text-emerald-400 tracking-wide">
+                All Systems Operational
+              </span>
+            </div>
+          </div>
+
+          {/* Column 2: For Candidates */}
+          <div className="flex flex-col gap-3">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-1">For Talents</h4>
+            <Link to="/jobs" className="text-sm hover:text-white transition-colors w-fit">Explore Jobs</Link>
+            <Link to="/browse" className="text-sm hover:text-white transition-colors w-fit">Browse Categories</Link>
+            <Link to="/profile" className="text-sm hover:text-white transition-colors w-fit">Candidate Dashboard</Link>
+            <a href="#" className="text-sm hover:text-white transition-colors w-fit">Resume Builder <span className="text-[10px] bg-indigo-500/20 text-indigo-300 font-bold px-1.5 py-0.5 rounded ml-1 uppercase">New</span></a>
+          </div>
+
+          {/* Column 3: For Recruiters */}
+          <div className="flex flex-col gap-3">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-1">For Employers</h4>
+            <Link to="/admin/companies" className="text-sm hover:text-white transition-colors w-fit">Post a Vacancy</Link>
+            <Link to="/admin/jobs" className="text-sm hover:text-white transition-colors w-fit">Talent Sourcing</Link>
+            <a href="#" className="text-sm hover:text-white transition-colors w-fit">Enterprise Solutions</a>
+            <a href="#" className="text-sm hover:text-white transition-colors w-fit">Hiring API</a>
+          </div>
+
+          {/* Column 4: Newsletter Subscription */}
+          <div className="flex flex-col gap-3">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-1">Stay Updated</h4>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Get weekly curated digests of newly posted premium remote tech positions.
+            </p>
+            <form onSubmit={handleSubscribe} className="flex items-center bg-white/5 border border-white/10 p-1 rounded-xl focus-within:border-indigo-500/50 focus-within:ring-1 focus-within:ring-indigo-500/20 transition-all duration-300 mt-1">
+              <input 
+                type="email" 
+                placeholder="name@domain.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-transparent text-xs text-white placeholder-gray-500 outline-none px-3 py-2 w-full"
+              />
+              <button 
+                type="submit" 
+                className="p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors duration-300"
+                aria-label="Subscribe"
+              >
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+        {/* Bottom Section: Copyright, Socials, and Disclaimers */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8">
+          
+          {/* Left: Author credits and Legal info */}
+          <div className="text-center md:text-left">
+            <p className="text-xs text-gray-500">&copy; {new Date().getFullYear()} JobHunt Corp. All rights reserved.</p>
+            <p className="text-xs mt-1.5 text-gray-500 flex items-center justify-center md:justify-start gap-1">
+              Crafted with <span className="text-red-500 text-[10px]"><FontAwesomeIcon icon={faHeart} /></span> by Siddharth
             </p>
           </div>
+
+          {/* Center: Extra Micro Legal Links */}
+          <div className="flex items-center gap-5 text-xs text-gray-500">
+            <a href="#" className="hover:text-gray-300 transition-colors">Privacy Policy</a>
+            <span className="text-white/5">•</span>
+            <a href="#" className="hover:text-gray-300 transition-colors">Terms of Service</a>
+            <span className="text-white/5">•</span>
+            <a href="#" className="hover:text-gray-300 transition-colors">Cookie Settings</a>
+          </div>
           
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="https://facebook.com" className="text-white hover:text-gray-200 transition-colors" aria-label="Facebook">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M22.676 0H1.324C.593 0 0 .592 0 1.324v21.352C0 23.408.593 24 1.324 24H12.82V14.706H9.692v-3.578h3.128V8.408c0-3.1 1.893-4.787 4.657-4.787 1.325 0 2.463.1 2.794.144v3.238l-1.918.001c-1.503 0-1.794.715-1.794 1.762v2.31h3.587l-.468 3.578h-3.119V24h6.116C23.407 24 24 23.408 24 22.676V1.324C24 .592 23.407 0 22.676 0z" />
-              </svg>
+          {/* Right: Modern Vector Social Badges */}
+          <div className="flex items-center gap-3">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white hover:bg-white/5 p-2 rounded-xl border border-white/5 transition-all duration-300" aria-label="LinkedIn">
+              <Linkedin className="w-4 h-4" />
             </a>
-            <a href="https://twitter.com" className="text-white hover:text-gray-200 transition-colors" aria-label="Twitter">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 4.557a9.835 9.835 0 01-2.828.775 4.934 4.934 0 002.165-2.724 9.867 9.867 0 01-3.127 1.195 4.924 4.924 0 00-8.38 4.49A13.978 13.978 0 011.67 3.149 4.93 4.93 0 003.16 9.724a4.903 4.903 0 01-2.229-.616v.062a4.93 4.93 0 003.946 4.827 4.902 4.902 0 01-2.224.084 4.93 4.93 0 004.6 3.417A9.869 9.869 0 010 21.543a13.978 13.978 0 007.548 2.212c9.057 0 14.01-7.507 14.01-14.01 0-.213-.004-.425-.015-.636A10.012 10.012 0 0024 4.557z" />
-              </svg>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white hover:bg-white/5 p-2 rounded-xl border border-white/5 transition-all duration-300" aria-label="GitHub">
+              <Github className="w-4 h-4" />
             </a>
-            <a href="https://linkedin.com" className="text-white hover:text-gray-200 transition-colors" aria-label="LinkedIn">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452H16.85v-5.569c0-1.327-.027-3.037-1.852-3.037-1.854 0-2.137 1.446-2.137 2.94v5.666H9.147V9.756h3.448v1.464h.05c.48-.91 1.653-1.871 3.401-1.871 3.634 0 4.307 2.39 4.307 5.498v5.605zM5.337 8.29c-1.105 0-2-.896-2-2 0-1.106.895-2 2-2 1.104 0 2 .895 2 2 0 1.104-.896 2-2 2zM7.119 20.452H3.553V9.756h3.566v10.696zM22.225 0H1.771C.791 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451c.979 0 1.771-.774 1.771-1.729V1.729C24 .774 23.205 0 22.225 0z" />
-              </svg>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white hover:bg-white/5 p-2 rounded-xl border border-white/5 transition-all duration-300" aria-label="Twitter">
+              <Twitter className="w-4 h-4" />
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white hover:bg-white/5 p-2 rounded-xl border border-white/5 transition-all duration-300" aria-label="Facebook">
+              <Facebook className="w-4 h-4" />
             </a>
           </div>
+
         </div>
       </div>
     </footer>

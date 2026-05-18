@@ -16,13 +16,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:5173',  // Allow requests from this origin
-    credentials: true  // Allow cookies and headers to be sent
-  }));
-
-const PORT=process.env.PORT || 3000
-
-
+    origin: process.env.FRONTEND_URL, // We will set this variable later
+    credentials: true
+}));
 
 
 app.use("/api/v1/user", userRoute)
@@ -31,7 +27,7 @@ app.use("/api/v1/job", jobRoute)
 app.use("/api/v1/application", applicationRoute);
 
 
-app.listen(PORT,()=>
-    {connectDB();
-    console.log("Server started at 3000")}
-);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

@@ -118,39 +118,61 @@ export const logout = async(req, res)=>{
     }
 }
 
-export const updateProfile= async(req,res)=>{
+export const updateProfile = async (req, res) => {
     try {
-        const {email, fullname, phoneNumber,password, bio, skills}=req.body;
-        const file=req.file
-        const fileUri=getDataUri(file);
-        const cloudResponse= await cloudinary.uploader.upload(fileUri.content);
+        const { email, fullname, phoneNumber, bio, skills } = req.body;
+        const file = req.file;
+        let cloudResponse = null;
 
-   let skillsArray;
-   if(skills){
-    skillsArray= skills.split(",");
-   }
-    const userId = req._id
+        // 1. Check file type before uploading
+        if (file) {
+            const fileUri = getDataUri(file);
+            
+            // Is it a PDF document?
+            const isPdf = file.mimetype === "application/pdf";
 
-    let user = await User.findOne(userId);
-    if (!user) {
-        return res.status(400).json({
-            message: "User not found.",
-            success: false
-        })
-    }
-        if(fullname) user.fullname = fullname
-        if(email) user.email = email
-        if(phoneNumber)  user.phoneNumber = phoneNumber
-        if(bio) user.profile.bio = bio
-        if(skills) user.profile.skills = skillsArray
-
-        if(cloudResponse){
-            user.profile.resume = cloudResponse.secure_url // save the cloudinary url
-            user.profile.resumeOriginalName = file.originalname // Save the original file name
+            cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+                resource_type: isPdf ? "raw" : "auto" // 👈 "raw" handles PDFs safely, "auto" handles images cleanly
+            });
         }
 
+        let skillsArray;
+        if (skills) {
+            skillsArray = skills.split(",");
+        }
+        
+        const userId = req._id || req.id;
+
+        let user = await User.findById(userId); 
+        if (!user) {
+            return res.status(400).json({
+                message: "User not found.",
+                success: false
+            });
+        }
+
+        // Updating basic text fields
+        if (fullname) user.fullname = fullname;
+        if (email) user.email = email;
+        if (phoneNumber) user.phoneNumber = phoneNumber;
+        if (bio) user.profile.bio = bio;
+        if (skills) user.profile.skills = skillsArray;
+
+        // 3. FIX HERE: Dynamically route the Cloudinary URL based on file type
+        if (cloudResponse) {
+            if (file.mimetype === "application/pdf") {
+                // If it's a PDF, save it to the resume fields
+                user.profile.resume = cloudResponse.secure_url; 
+                user.profile.resumeOriginalName = file.originalname; 
+            } else {
+                // If it's an image (PNG, JPG, JPEG), save it to the profilePhoto field!
+                user.profile.profilePhoto = cloudResponse.secure_url; 
+            }
+        }
 
         await user.save();
+
+        // Formatting the response user object so frontend updates smoothly
         user = {
             _id: user._id,
             fullname: user.fullname,
@@ -158,14 +180,19 @@ export const updateProfile= async(req,res)=>{
             phoneNumber: user.phoneNumber,
             role: user.role,
             profile: user.profile
-        }
+        };
+
         return res.status(200).json({
             message: "Profile updated successfully.",
             user,
             success: true
         });
+        
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "Internal server error.",
+            success: false
+        });
     }
-     
-}
+};
