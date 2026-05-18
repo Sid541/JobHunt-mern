@@ -21,23 +21,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Exact Production URLs & Local workspace addresses
+// Robust Production & Local CORS configuration
 const allowedOrigins = [
-    process.env.FRONTEND_URL,                                                      // Main Production Link
-    "https://job-hunt-mern-z346-eivp9vfrj-sid541s-projects.vercel.app",           // This specific Vercel URL
-    "http://localhost:5173"                                                        // Local Development Work space
+    process.env.FRONTEND_URL,          // Your live production Vercel link
+    "http://localhost:5173"            // Your local development server address
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow server-to-server or development requests without origin headers
+        // Allow requests with no origin (like mobile apps, Postman, or curl)
         if (!origin) return callback(null, true);
         
-        // Match the origin against our allowed array lists
-        if (allowedOrigins.includes(origin) || allowedOrigins.indexOf(origin) !== -1) {
+        // Check if the incoming request origin is allowed
+        if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes(origin)) {
             return callback(null, true);
         } else {
-            return callback(new Error("Request origin blocked by server security CORS policy"));
+            return callback(new Error("Not allowed by CORS policy configuration"));
         }
     },
     credentials: true,
@@ -51,8 +50,8 @@ app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
-// Server Listen
+// Server Instantiation
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running cleanly via process.env on port ${PORT}`);
+    console.log(`Server running safely on port ${PORT}`);
 });

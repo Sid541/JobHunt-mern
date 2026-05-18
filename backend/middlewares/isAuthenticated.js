@@ -15,9 +15,23 @@ const isAuthenticated = async (req, res, next) => {
 
         // Verify the token
         const decode = jwt.verify(token, process.env.SECRET_KEY);
+        
+        // 🔍 DEBUG LOG: Look at your Render terminal logs to see exactly what keys exist inside your payload!
+        console.log("--- Token Payload Decode ---", decode);
 
-        // Attach user ID to request object
-        req.id = decode.userId;
+        // Fallback-safe ID check to cleanly catch 'userId', '_id', or 'id'
+        const extractedId = decode.userId || decode.id || decode._id;
+
+        if (!extractedId) {
+            console.error("❌ Token verified successfully, but no valid User ID field found in the payload!");
+            return res.status(401).json({
+                message: "Authentication payload is missing user identifiers",
+                success: false,
+            });
+        }
+
+        // Attach user ID to request object (Matches your updated job.controller perfectly)
+        req.id = extractedId;
 
         // Proceed to next middleware or route handler
         next();

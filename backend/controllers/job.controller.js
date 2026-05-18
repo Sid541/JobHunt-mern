@@ -4,7 +4,16 @@ import { Job } from "../models/job.model.js";
 export const postJob = async (req, res) => {
     try {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
-        const userId = req.id || req._id;
+        
+        // Match directly with what your updated isAuthenticated middleware passes down
+        const userId = req.id; 
+
+        if (!userId) {
+            return res.status(401).json({
+                message: "Unauthorized. Please log in again.",
+                success: false
+            });
+        }
 
         if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
             return res.status(400).json({
@@ -20,10 +29,10 @@ export const postJob = async (req, res) => {
             salary: Number(salary) || 0,
             location,
             jobType,
-            experience: Number(experience), // 👈 Fixed property name to match your job.model.js schema definition
+            experience: Number(experience),
             position,
             company: companyId,
-            created_by: userId
+            created_by: userId // Links to the authorized recruiter's _id cleanly
         });
 
         return res.status(201).json({
@@ -103,10 +112,8 @@ export const getJobById = async (req, res) => {
 // 4. Fetch all job positions posted by a single specific Recruiter admin account
 export const getAdminJobs = async (req, res) => {
     try {
-        console.log("=================== GET ADMIN JOBS START ===================");
-        
-        // 1. Log the incoming User ID from the authentication middleware
-        const adminId = req.id || req._id;
+        // Updated to use the clean req.id variable from your verified token payload
+        const adminId = req.id; 
         console.log("➡️ [AUTH CHECK] Logged-in Admin User ID (req.id):", adminId);
 
         if (!adminId) {
@@ -117,7 +124,6 @@ export const getAdminJobs = async (req, res) => {
             });
         }
 
-        // 2. Query MongoDB for matching jobs (including a fallback for old legacy test entries)
         console.log("🔍 [DB QUERY] Fetching jobs matching created_by:", adminId, "or legacy entries...");
         
         const jobs = await Job.find({ 
@@ -132,7 +138,6 @@ export const getAdminJobs = async (req, res) => {
         })
         .sort({ createdAt: -1 });
 
-        // 3. Log the query results
         console.log("📦 [DB RESULT] Raw jobs array returned from MongoDB. Total count:", jobs ? jobs.length : 0);
         
         if (jobs && jobs.length > 0) {
@@ -144,7 +149,6 @@ export const getAdminJobs = async (req, res) => {
             console.log("⚠️ [DB WARNING] The jobs array is completely empty.");
         }
 
-        // 4. Handle empty arrays gracefully so the frontend React state doesn't crash
         if (!jobs || jobs.length === 0) {
             console.log("✅ [RESPONSE] Sending empty array fallback to frontend with status 200.");
             console.log("==================== GET ADMIN JOBS END ====================");
@@ -198,7 +202,7 @@ export const updateJob = async (req, res) => {
         );
 
         if (!updatedJob) {
-            return res.status(404).json({ // Changed custom 444 status to standard 404 client error code
+            return res.status(404).json({ 
                 message: "Job not found.",
                 success: false
             });
