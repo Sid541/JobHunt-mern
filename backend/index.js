@@ -21,28 +21,34 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Robust Production & Local CORS configuration
+// Static Allowed Origins Array
 const allowedOrigins = [
-    process.env.FRONTEND_URL,          // Your live production Vercel link
+    process.env.FRONTEND_URL,          // Your main production Vercel link
     "http://localhost:5173"            // Your local development server address
 ];
 
-app.use(cors({
+const corsOptions = {
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps, Postman, or curl)
+        // Allow requests with no origin (like mobile apps, Postman, or server-to-server)
         if (!origin) return callback(null, true);
         
-        // Check if the incoming request origin is allowed
-        if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes(origin)) {
+        // Dynamic Check: Allow exact matches OR any branch preview url containing "vercel.app"
+        if (allowedOrigins.includes(origin) || origin.includes("vercel.app")) {
             return callback(null, true);
         } else {
-            return callback(new Error("Not allowed by CORS policy configuration"));
+            return callback(new Error(`CORS policy restriction. Origin: ${origin} not allowed.`));
         }
     },
-    credentials: true,
+    credentials: true, // Crucial for passing secure token cookies between different domains
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
-}));
+};
+
+// Apply CORS options to all standard incoming requests
+app.use(cors(corsOptions));
+
+// Explicitly handle browser CORS preflight OPTIONS handshakes globally
+app.options("*", cors(corsOptions));
 
 // API Routes
 app.use("/api/v1/user", userRoute);
