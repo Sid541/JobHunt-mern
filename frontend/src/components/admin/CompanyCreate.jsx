@@ -8,6 +8,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { useDispatch } from 'react-redux';
 import { setSingleCompany } from '@/redux/companySlice';
+import {COMPANY_API_END_POINT } from "@/utils/constant";
 
 const CompanyCreate = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const CompanyCreate = () => {
             return;
         }
         try {
-            const res = await axios.post(`http://localhost:3000/api/v1/company/register`, { companyName }, {
+            const res = await axios.post(`${COMPANY_API_END_POINT}/register`, { companyName }, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });

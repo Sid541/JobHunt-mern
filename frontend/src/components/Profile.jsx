@@ -12,6 +12,7 @@ import { setUser } from "@/redux/authSlice";
 import useGetAppliedJobs from "@/hooks/useGetAppliedJobs";
 import axios from "axios";
 import { toast } from "sonner";
+import { USER_API_END_POINT } from "../utils/constant";
 
 const Profile = () => {
   useGetAppliedJobs();
@@ -30,7 +31,7 @@ const Profile = () => {
 
     try {
       setUploading(true);
-      const res = await axios.post("http://localhost:3000/api/v1/user/profile/update-photo", formData, {
+      const res = await axios.post(`{USER_API_END_POINT}/profile/update-photo`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });

@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import useGetCompanyById from "@/hooks/useGetCompanyById";
+import {COMPANY_API_END_POINT } from "@/utils/constant";
 
 const CompanySetup = () => {
   const params = useParams();
@@ -60,7 +61,7 @@ const CompanySetup = () => {
 
     try {
       setLoading(true);
-      const res = await axios.put(`http://localhost:3000/api/v1/company/update/${params.id}`, formData, {
+      const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
       });

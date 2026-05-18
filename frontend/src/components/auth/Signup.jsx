@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "@/redux/authSlice";
 import { Loader2, UserPlus, ShieldCheck, UploadCloud } from "lucide-react";
+import {USER_API_END_POINT } from "@/utils/constant";
 
 const Signup = () => {
   const [input, setInput] = useState({
@@ -66,7 +67,7 @@ const Signup = () => {
 
     try {
       dispatch(setLoading(true));
-      const res = await axios.post("http://localhost:3000/api/v1/user/register", formData, {
+      const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

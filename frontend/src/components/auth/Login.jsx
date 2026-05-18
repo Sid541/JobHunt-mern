@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading, setUser } from '@/redux/authSlice';
 import { Loader2, KeyRound, ShieldAlert, Sparkles } from 'lucide-react';
+import {USER_API_END_POINT } from "@/utils/constant";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -48,7 +49,7 @@ const Login = () => {
     }
     try {
       dispatch(setLoading(true));
-      const res = await axios.post("http://localhost:3000/api/v1/user/login", input, {
+      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

@@ -6,6 +6,7 @@ import axios from "axios";
 import { setSingleJob } from "@/redux/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
+import { APPLICATION_API_END_POINT } from "../utils/constant";
 import { 
   Calendar, 
   Briefcase, 
@@ -41,7 +42,7 @@ const JobDescription = () => {
   const applyJobHandler = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/application/apply/${jobId}`,
+        `${APPLICATION_API_END_POINT}/apply/${jobId}`,
         { withCredentials: true }
       );
 
@@ -65,7 +66,7 @@ const JobDescription = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:3000/api/v1/job/get/${jobId}`,
+          `JOB_API_END_POINT/get/${jobId}`,
           { withCredentials: true }
         );
         if (res.data.success) {

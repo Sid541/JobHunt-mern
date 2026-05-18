@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import useGetJobById from '@/hooks/useGetJobById';
+import { JOB_API_END_POINT } from "@/utils/constant";
 
 const EditJob = () => {
     const params = useParams();
@@ -65,7 +66,7 @@ const EditJob = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await axios.put(`http://localhost:3000/api/v1/job/update/${jobId}`, input, {
+            const res = await axios.put(`${JOB_API_END_POINT}/update/${jobId}`, input, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });

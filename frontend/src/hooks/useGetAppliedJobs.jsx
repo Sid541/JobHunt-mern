@@ -2,6 +2,7 @@ import { setAllAppliedJobs } from '@/redux/jobSlice';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { APPLICATION_API_END_POINT } from "../utils/constant";
 
 // 1. Removed "async" from the main hook definition
 const useGetAppliedJobs = () => { 
@@ -11,7 +12,7 @@ const useGetAppliedJobs = () => {
         // 2. This inner function is perfectly fine being async!
         const fetchAppliedJobs = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/api/v1/application/get", {
+                const res = await axios.get(`${APPLICATION_API_END_POINT}/get`, {
                     withCredentials: true
                 });
             

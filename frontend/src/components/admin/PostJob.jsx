@@ -9,6 +9,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowLeft } from 'lucide-react';
+import {JOB_API_END_POINT } from "@/utils/constant";
 
 const PostJob = () => {
     const [input, setInput] = useState({
@@ -45,7 +46,7 @@ const PostJob = () => {
         }
         try {
             setLoading(true);
-            const res = await axios.post(`http://localhost:3000/api/v1/job/post`, input, {
+            const res = await axios.post(`${JOB_API_END_POINT}/post`, input, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });

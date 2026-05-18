@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { setUser } from '@/redux/authSlice';
 import { toast } from 'sonner';
+import { USER_API_END_POINT } from "../utils/constant";
+
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
     const [loading, setLoading] = useState(false);
@@ -46,7 +48,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
         try {
             setLoading(true);
-            const res = await axios.post("http://localhost:3000/api/v1/user/profile/update", formData, {
+            const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

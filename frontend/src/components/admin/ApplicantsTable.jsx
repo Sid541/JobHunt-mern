@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setAllApplicants } from "@/redux/applicationSlice"; // Make sure this matches your exact Redux slice action name
 import { toast } from "sonner";
 import axios from "axios";
-
+import {APPLICATION_API_END_POINT } from "@/utils/constant";
 const shortlistingStatus = ["Accepted", "Rejected"];
 
 const ApplicantsTable = () => {
@@ -34,7 +34,7 @@ const ApplicantsTable = () => {
     try {
       axios.defaults.withCredentials = true;
       const res = await axios.post(
-        `http://localhost:3000/api/v1/application/status/${id}/update`,
+        `${APPLICATION_API_END_POINT}/status/${id}/update`,
         { status }
       );
       if (res.data.success) {
