@@ -3,6 +3,9 @@
 // Dynamic Base URL configuration
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
+// Log to check which URL is being used
+console.log("BASE_URL:", BASE_URL);
+
 // Centralized API endpoints
 export const USER_API_END_POINT        = `${BASE_URL}/user`;
 export const JOB_API_END_POINT         = `${BASE_URL}/job`;
