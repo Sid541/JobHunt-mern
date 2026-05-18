@@ -1,15 +1,10 @@
 // src/utils/constant.js
 
-// Dynamic Base URL check
-
+// Dynamic Base URL configuration targeting local machine
+const BASE_URL = "http://localhost:3000/api/v1";
 
 // Centralized API endpoints
-export const USER_API_END_POINT        = "https://jobhunt-mern-1.onrender.com/api/v1/user"
-export const JOB_API_END_POINT         = "https://jobhunt-mern-1.onrender.com/api/v1/job"
-export const COMPANY_API_END_POINT     = "https://jobhunt-mern-1.onrender.com/api/v1/company"
-export const APPLICATION_API_END_POINT = "https://jobhunt-mern-1.onrender.com/api/v1/application"
-
-
-
-
-
+export const USER_API_END_POINT        = `${BASE_URL}/user`;
+export const JOB_API_END_POINT         = `${BASE_URL}/job`;
+export const COMPANY_API_END_POINT     = `${BASE_URL}/company`;
+export const APPLICATION_API_END_POINT = `${BASE_URL}/application`;

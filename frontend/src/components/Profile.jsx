@@ -12,7 +12,7 @@ import { setUser } from "@/redux/authSlice";
 import useGetAppliedJobs from "@/hooks/useGetAppliedJobs";
 import axios from "axios";
 import { toast } from "sonner";
-import { USER_API_END_POINT } from "../utils/constant";
+import { USER_API_END_POINT } from "@/utils/constant";
 
 const Profile = () => {
   useGetAppliedJobs();
