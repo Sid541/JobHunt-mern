@@ -12,17 +12,28 @@ import applicationRoute from "./routes/application.route.js"
 
 const app = express();
 
-// Core Body & Cookie Parsers
+// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// CORS configuration
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    "http://localhost:5173",
+    "https://jobhunt-mern-3.onrender.com"
+];
+
 app.use(cors({
-    origin:"https://jobhunt-mern-3.onrender.com",
-    credentials :true
-}))
-
-
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 
 const PORT = process.env.PORT || 3000;
 
@@ -33,7 +44,6 @@ app.get("/test", (req, res) => {
     });
 });
 
-// API Routing Paths
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
