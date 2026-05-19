@@ -6,7 +6,7 @@ import axios from "axios";
 import { setSingleJob } from "@/redux/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
-import { APPLICATION_API_END_POINT } from "../utils/constant";
+const APPLICATION_API_END_POINT = import.meta.env.VITE_APPLICATION_API_END_POINT
 import { 
   Calendar, 
   Briefcase, 

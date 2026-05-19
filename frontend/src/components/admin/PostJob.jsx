@@ -9,7 +9,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowLeft } from 'lucide-react';
-import {JOB_API_END_POINT } from "@/utils/constant";
+const JOB_API_END_POINT = import.meta.env.VITE_JOB_API_END_POINT
 
 const PostJob = () => {
     const [input, setInput] = useState({

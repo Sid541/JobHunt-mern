@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
 import { setUser } from "@/redux/authSlice";
-import {USER_API_END_POINT} from "@/utils/constant";
+const USER_API_END_POINT = import.meta.env.VITE_USER_API_END_POINT
 
 const Navbar = () => {
   const { user } = useSelector(store => store.auth);

@@ -2,7 +2,7 @@ import { setSingleJob } from "@/redux/jobSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { JOB_API_END_POINT } from "@/utils/constant";
+const JOB_API_END_POINT = import.meta.env.VITE_JOB_COMPANY_END_POINT
 
 const useGetJobById = (jobId) => {
     const dispatch = useDispatch();

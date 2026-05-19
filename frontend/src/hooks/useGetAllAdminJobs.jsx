@@ -3,7 +3,7 @@ import { setAllAdminJobs } from '@/redux/jobSlice'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { JOB_API_END_POINT } from "@/utils/constant"; // Adjust the relative path if necessary
+const JOB_API_END_POINT = import.meta.env.VITE_JOB_API_END_POINT // Adjust the relative path if necessary
 
 const useGetAllAdminJobs = async() => {
     const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import { setAllAppliedJobs } from '@/redux/jobSlice';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { APPLICATION_API_END_POINT } from "@/utils/constant";
+const APPLICATION_API_END_POINT = import.meta.env.VITE_APPLICATION_API_END_POINT
 
 // 1. Removed "async" from the main hook definition
 const useGetAppliedJobs = () => { 

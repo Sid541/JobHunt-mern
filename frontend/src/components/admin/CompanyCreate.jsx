@@ -8,7 +8,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { useDispatch } from 'react-redux';
 import { setSingleCompany } from '@/redux/companySlice';
-import {COMPANY_API_END_POINT } from "@/utils/constant";
+const COMPANY_API_END_POINT = import.meta.env.VITE_COMPANY_API_END_POINT
 
 const CompanyCreate = () => {
     const navigate = useNavigate();

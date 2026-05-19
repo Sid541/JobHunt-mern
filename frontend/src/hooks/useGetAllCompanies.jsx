@@ -2,7 +2,7 @@ import { setCompanies} from '@/redux/companySlice'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { COMPANY_API_END_POINT } from "@/utils/constant";
+const COMPANY_API_END_POINT = import.meta.env.VITE_USER_COMPANY_END_POINT
 
 const useGetAllCompanies =  () => {
     const dispatch = useDispatch();

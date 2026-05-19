@@ -1,4 +1,4 @@
-import { JOB_API_END_POINT } from "@/utils/constant";
+const JOB_API_END_POINT = import.meta.env.VITE_JOB_API_END_POINT
 import { setAllJobs } from '@/redux/jobSlice'
 import axios from 'axios'
 import { useEffect } from 'react'

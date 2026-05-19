@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { setUser } from '@/redux/authSlice';
 import { toast } from 'sonner';
-import { USER_API_END_POINT } from "@/utils/constant";
+const USER_API_END_POINT = import.meta.env.VITE_USER_API_END_POINT
 
 
 const UpdateProfileDialog = ({ open, setOpen }) => {

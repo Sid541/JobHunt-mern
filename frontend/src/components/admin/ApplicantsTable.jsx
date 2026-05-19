@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setAllApplicants } from "@/redux/applicationSlice"; // Make sure this matches your exact Redux slice action name
 import { toast } from "sonner";
 import axios from "axios";
-import {APPLICATION_API_END_POINT } from "@/utils/constant";
+const APPLICATION_API_END_POINT = import.meta.env.VITE_APPLICATION_API_END_POINT
 const shortlistingStatus = ["Accepted", "Rejected"];
 
 const ApplicantsTable = () => {

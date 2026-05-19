@@ -9,7 +9,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import useGetCompanyById from "@/hooks/useGetCompanyById";
-import {COMPANY_API_END_POINT } from "@/utils/constant";
+const COMPANY_API_END_POINT = import.meta.env.VITE_COMPANY_API_END_POINT
 
 const CompanySetup = () => {
   const params = useParams();

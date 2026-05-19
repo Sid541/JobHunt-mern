@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "@/redux/authSlice";
 import { Loader2, UserPlus, ShieldCheck, UploadCloud } from "lucide-react";
-import {USER_API_END_POINT } from "@/utils/constant";
+const USER_API_END_POINT = import.meta.env.VITE_USER_API_END_POINT
 
 const Signup = () => {
   const [input, setInput] = useState({

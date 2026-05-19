@@ -5,7 +5,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllApplicants } from "@/redux/applicationSlice";
-import {APPLICATION_API_END_POINT } from "@/utils/constant";
+
+const APPLICATION_API_END_POINT = import.meta.env.VITE_APPLICATION_API_END_POINT
 
 const Applicants = () => {
   const params = useParams();
