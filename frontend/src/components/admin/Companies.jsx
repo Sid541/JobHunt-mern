@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../shared/Navbar';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import CompaniesTable from './CompaniesTable';
 import { useNavigate } from 'react-router-dom';
+import useGetAllCompanies from '@/hooks/useGetAllCompanies';
+import { useDispatch } from 'react-redux';
+import { setSearchCompanyByText } from '@/redux/companySlice';
 
 const Companies = () => {
-    // ⚡ Local state replaces Redux global slice values
+    useGetAllCompanies();
     const [input, setInput] = useState("");
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setSearchCompanyByText(input));
+    }, [input, dispatch]);
 
     return (
         <div className="relative min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0F1424] to-[#0B1120] text-gray-200">
-            {/* Ambient Background Glows */}
+            {/* Ambient Background Glows (Blinking fixed by removing animate-pulse) */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                {/* Removed 'animate-pulse' from this div */}
                 <div className="absolute top-1/4 right-10 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
+                {/* Removed 'animate-pulse duration-3000' from this div */}
                 <div className="absolute bottom-1/4 left-10 w-96 h-96 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
             </div>
 
@@ -25,7 +35,6 @@ const Companies = () => {
                         <Input
                             className="w-fit px-4 py-2 bg-[#141b2d] border-white/10 text-white placeholder-gray-400 focus:border-[#632dc0] focus:ring-1 focus:ring-[#632dc0] rounded-xl"
                             placeholder="Filter by Company name..."
-                            value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
                         <Button 
@@ -35,8 +44,7 @@ const Companies = () => {
                             + Add New Company
                         </Button>
                     </div>
-                    {/* ⚡ Pass the local tracking input text directly to the table component */}
-                    <CompaniesTable searchCompanyByText={input} />
+                    <CompaniesTable />
                 </div>
             </div>
         </div>

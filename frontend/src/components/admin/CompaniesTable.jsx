@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Table,
   TableBody,
@@ -12,60 +11,22 @@ import {
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Edit2, MoreHorizontal } from "lucide-react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-// Read API endpoints directly into your component environment variable paths
-const COMPANY_API_END_POINT = import.meta.env.VITE_USER_COMPANY_END_POINT;
-
-const CompaniesTable = ({ searchCompanyByText }) => {
-  // ⚡ Local component values capture matching database payloads 
-  const [companies, setCompanies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const CompaniesTable = () => {
+  const { companies, searchCompanyByText } = useSelector((store) => store.company);
+  console.log(companies)
+  const [filteredCompanies, setFilteredCompanies] = useState(companies);
   const navigate = useNavigate();
-  console.loh(companies);
 
-  // Fetch all user matching companies on component mount
   useEffect(() => {
-    const fetchAllCompanies = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Connect directly to your live/local authenticated get controller endpoints
-        const res = await axios.get(`${COMPANY_API_END_POINT}/get`, {
-          withCredentials: true, // Vital requirement ensuring authentication token cookies pass safely
-        });
-         console.log(res.data);
-        if (res.data.success) {
-          setCompanies(res.data.companies || []);
-        } else {
-          setError("Could not retrieve company listings.");
-        }
-      } catch (err) {
-        console.error("API Fetch Error:", err);
-        setError("An unexpected error occurred while loading table columns.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAllCompanies();
-  }, []);
-
-  // Compute search criteria filters on-the-fly dynamically inside every rendering run
-  const filteredCompanies = companies?.filter((company) => {
-    if (!searchCompanyByText) return true;
-    return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
-  });
-
-  if (loading) {
-    return <div className="text-center py-10 text-gray-400">Loading your registers...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center py-10 text-red-400 font-medium">{error}</div>;
-  }
+    const filtered = companies?.filter((company) => {
+      if (!searchCompanyByText) return true;
+      return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
+    });
+    setFilteredCompanies(filtered);
+  }, [companies, searchCompanyByText]);
 
   return (
     <div className="backdrop-blur-md bg-white/5 border border-white/10 p-6 rounded-2xl shadow-2xl overflow-hidden">
@@ -89,9 +50,7 @@ const CompaniesTable = ({ searchCompanyByText }) => {
                   </Avatar>
                 </TableCell>
                 <TableCell className="font-medium text-white">{company.name}</TableCell>
-                <TableCell className="text-gray-300">
-                  {company.createdAt ? new Date(company.createdAt).toLocaleDateString() : "N/A"}
-                </TableCell>
+                <TableCell className="text-gray-300">{new Date(company.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell className="text-right">
                   <Popover>
                     <PopoverTrigger>
