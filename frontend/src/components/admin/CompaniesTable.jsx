@@ -23,6 +23,7 @@ const CompaniesTable = ({ searchCompanyByText }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  console.loh(companies);
 
   // Fetch all user matching companies on component mount
   useEffect(() => {
@@ -35,7 +36,7 @@ const CompaniesTable = ({ searchCompanyByText }) => {
         const res = await axios.get(`${COMPANY_API_END_POINT}/get`, {
           withCredentials: true, // Vital requirement ensuring authentication token cookies pass safely
         });
-
+         console.log(res.data);
         if (res.data.success) {
           setCompanies(res.data.companies || []);
         } else {
