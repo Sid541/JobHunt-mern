@@ -1,36 +1,50 @@
-JobHunt — MERN Job Portal
-JobHunt is a job portal application that connects job seekers with recruiters through a streamlined platform. It features two primary dashboards—one for recruiters and one for students. Recruiters can post job openings for their registered companies, and students can browse, apply for jobs, and receive real-time updates on their application status.  
+💼 JobHunt — MERN Job Portal
+JobHunt is a modern job portal application that bridges the gap between job seekers and recruiters through a streamlined, high-performance platform.
 
-Features
-User Authentication: Secure login and signup functionality with identity role provisioning.  
+The application architecture features two primary workflows—one tailored for recruiters to scout talent, and another dedicated to students looking to kickstart their careers. Recruiters can post job openings for their registered companies, while students can browse, apply for jobs, and receive real-time updates on their application status.
 
-Recruiter Dashboard: * Post and manage comprehensive job listings for registered business entities.
+🚀 Features
+🔐 User Authentication: Secure login and signup functionality equipped with server-side identity role provisioning (Recruiter vs. Student).
 
-Monitor incoming applicant pipelines.
+🎯 Recruiter Dashboard:
 
-Process real-time applicant indexing (Accept or Reject application profiles).
+🏢 Post and manage comprehensive job listings for registered business entities.
 
-Student Dashboard: * Filter, browse, and apply for open positions.
+👥 Monitor incoming applicant pipelines with granular tracking.
 
-Track active submissions and historical career selections.
+🔄 Process real-time applicant indexing (Set status to Accepted or Rejected).
 
-Real-Time System Feedback: Instant ui updates mapping user tracking pipelines.
+🎓 Student Dashboard:
 
-Automated Email Notifications: Instantly sends an automated transactional email notification to the applicant's registered email address whenever a recruiter updates their application review status (e.g., Selected or Rejected).
+🔍 Filter, browse, and apply for open positions seamlessly.
 
-Cloud Infrastructure Asset Hosting: Cloudinary storage engine integration handling user profile avatar files and organization branding assets.
+📊 Track active submissions and historical career selections.
 
-Tech Stack
-Frontend: React, Tailwind CSS, Shadcn UI
+⚡ Real-Time System Feedback: Dynamic UI updates mapping user tracking pipelines instantly without jarring full-page reloads.
 
-Backend: Node.js, Express
+📧 Automated Email Notifications: Instantly triggers an automated transactional email notification to the applicant's registered email address the exact moment a recruiter updates their application review status (e.g., Selected or Rejected).
 
-Database: MongoDB Atlas (Cloud Database Management Engine)
+☁️ Cloud Infrastructure Asset Hosting: Deep integration with the Cloudinary storage engine to handle user profile avatars and organizational branding media assets.
 
-Authentication: JWT (JSON Web Token Architecture) using encrypted http-only cookies
+🛠️ Tech Stack
+🎨 Frontend: React.js, Tailwind CSS, Shadcn UI
 
-State Management: Redux Toolkit (Persistent root state configuration)
+⚙️ Backend: Node.js, Express.js
 
-Email Broker Integration: Nodemailer / SendGrid API
+🗄️ Database: MongoDB Atlas (Cloud Database Management Engine)
 
-Image Hosting: Cloudinary CDN
+🔑 Authentication: JWT (JSON Web Token Architecture) utilizing encrypted, secure httpOnly cookies.
+
+🧠 State Management: Redux Toolkit (Persistent root state configuration)
+
+📨 Email Broker Integration: Nodemailer / SendGrid API
+
+🖼️ Image Hosting: Cloudinary CDN
+
+💻 Installation & Setup
+📋 Prerequisites
+Node.js (>=14.0.0)
+
+npm (>=6.14.0) or yarn (>=1.22.0)
+
+A live MongoDB Atlas Connection String Matrix
