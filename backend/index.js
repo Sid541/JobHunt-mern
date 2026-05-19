@@ -1,5 +1,5 @@
 import dotenv from "dotenv"
-dotenv.config({});  // ← FIRST before everything
+dotenv.config({});
 
 import cookieParser from "cookie-parser";
 import express from "express";
@@ -12,12 +12,7 @@ import applicationRoute from "./routes/application.route.js"
 
 const app = express();
 
-// middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-// CORS configuration
+// ✅ CORS must be FIRST — before any other middleware
 const allowedOrigins = [
     process.env.FRONTEND_URL,
     "http://localhost:5173",
@@ -32,8 +27,18 @@ app.use(cors({
             callback(new Error("Not allowed by CORS"));
         }
     },
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],       // ✅ added
+    allowedHeaders: ["Content-Type", "Authorization"],          // ✅ added
 }));
+
+// ✅ Handle preflight requests explicitly for all routes
+app.options("*", cors());
+
+// Other middleware after CORS
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
 
