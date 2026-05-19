@@ -11,7 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import useGetJobById from '@/hooks/useGetJobById';
 const JOB_API_END_POINT = import.meta.env.VITE_JOB_API_END_POINT
-console.log(JOB_API_END_POINT)
+
 
 const EditJob = () => {
     const params = useParams();
