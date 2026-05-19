@@ -1,17 +1,17 @@
-import { setCompanies } from '@/redux/companySlice'
+import { setCompanies} from '@/redux/companySlice'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+const COMPANY_API_END_POINT = import.meta.env.VVITE_COMPANY_API_END_POINT
 
-const COMPANY_API_END_POINT = import.meta.env.VITE_USER_COMPANY_END_POINT
-
-const useGetAllCompanies = () => {
+const useGetAllCompanies =  () => {
     const dispatch = useDispatch();
-
-    useEffect(() => {
+    useEffect(()=>{
         const fetchCompanies = async () => {
             try {
-                const res = await axios.get(`${COMPANY_API_END_POINT}/get`, { withCredentials: true });
+                const res = await axios.get(`${COMPANY_API_END_POINT}/get`,{withCredentials:true});
+                
+                
                 if (res.data.success) {
                     dispatch(setCompanies(res.data.companies));
                 }
@@ -20,7 +20,7 @@ const useGetAllCompanies = () => {
             }
         }
         fetchCompanies();
-    }, [dispatch, COMPANY_API_END_POINT]); // ⚡ Make sure this dependency array is updated
+    },[dispatch])
 }
 
-export default useGetAllCompanies;
+export default useGetAllCompanies
